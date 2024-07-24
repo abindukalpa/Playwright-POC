@@ -36,7 +36,12 @@ test("PragGames", async ({ page }) => {
   await page.getByLabel("PIN").fill("");
   await page.getByRole("button", { name: "I Accept" }).click();
   page.getByRole("button", { name: "Log in" }).focus;
-  await page.getByRole("button", { name: "Log in" }).click();
+
+  try {
+    await page.getByRole("button", { name: "Log in" }).click();
+  } catch (error) {
+    await page.screenshot({ path: "loginfailure.png" });
+  }
 
   await expect(page).toHaveURL("https://skyvegas.com.nxt.ppbdev.com/");
   await expect(page).toHaveTitle(
@@ -70,6 +75,7 @@ test("PragGames", async ({ page }) => {
         );
         expect(messageExists).toBe(true);
       }).toPass({
+        intervals: [5_000, 10_000, 15_000],
         timeout: 60_000,
       });
     } catch (error) {
