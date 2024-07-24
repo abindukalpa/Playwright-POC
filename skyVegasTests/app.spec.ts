@@ -42,6 +42,6 @@ test("launchGame", async ({page}) => {
   expect(linksCount).toBe(11);
 } )
 
-
+export {login};
 
 
