@@ -11,10 +11,13 @@ test("Page OK", async ({ page }) => {
 });
 
 test("PragGames", async ({ page }) => {
-  await page.goto("https://skyvegas.com.nxt.ppbdev.com/");
+  const userName = process.env.USERNAME!;
+  const password = process.env.PASSWORD!;
+  const url = process.env.URL!;
+  await page.goto(url);
   await page.getByRole("link", { name: "Log In" }).click();
-  await page.getByLabel("Username").fill("rgsSBGbNTPp");
-  await page.getByLabel("PIN").fill("964459");
+  await page.getByLabel("Username").fill(userName);
+  await page.getByLabel("PIN").fill(password);
   await page.getByRole("button", { name: "I Accept" }).click();
   page.getByRole("button", { name: "Log in" }).focus;
 
@@ -24,14 +27,14 @@ test("PragGames", async ({ page }) => {
     await page.screenshot({ path: "loginfailure.png" });
   }
 
-  await expect(page).toHaveURL("https://skyvegas.com.nxt.ppbdev.com/");
+  await expect(page).toHaveURL(url);
   await expect(page).toHaveTitle(
     "Online Vegas Games | 50 Free Spins | SBG Vegas"
   );
   await expect(
     page.getByText("CONGRATULATIONS TO OUR LUCKY WINNER")
   ).toBeVisible();
-  await page.goto("https://skyvegas.com.nxt.ppbdev.com/c/pragmatic-games/");
+  await page.goto("https://skyvegas.com.nxt.ppbdev.com/c/pragmatic-games/"); //wip
   const linksCount = await page
     .getByRole("link", { name: "Real Play" })
     .count();
