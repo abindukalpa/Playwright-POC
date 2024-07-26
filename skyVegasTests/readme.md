@@ -8,4 +8,4 @@ a. .env.nxt
 b. .env.live
 
 Since the default environment is dev per line 7 in playwright.config.ts, clicking on the play button via the extension will work in getting the dev parameters.
-For executing any other environment execute the following from the terminal `NODE_ENV=live npx playwright test -g "test login works"`
+For executing live execute `npm run testlive`
