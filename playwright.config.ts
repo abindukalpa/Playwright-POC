@@ -1,5 +1,17 @@
 import { defineConfig, devices } from "@playwright/test";
+import * as fs from "fs";
+import * as path from "path";
+import * as dotenv from "dotenv";
+require("dotenv").config();
 
+const envFile = `.env.${process.env.NODE_ENV || "nxt"}`;
+const envPath = path.resolve(process.cwd(), envFile);
+
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath });
+} else {
+  console.warn(`No ${envFile} file found.`);
+}
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
