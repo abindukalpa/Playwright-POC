@@ -41,9 +41,8 @@ test("PragGames", async ({ page }) => {
   expect(linksCount).toBe(11);
 
   for (let i = 0; i < linksCount; i++) {
-    var link = await page.getByRole("link", { name: "Real Play" }).nth(i);
     const consoleMessages: string[] = [];
-    await link.click();
+    await page.getByRole("link", { name: "Real Play" }).nth(i).click();
     page.on("console", (msg) => {
       consoleMessages.push(msg.text());
     });
