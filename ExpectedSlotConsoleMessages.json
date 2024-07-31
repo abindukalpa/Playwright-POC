@@ -1,7 +1,69 @@
-{
-    "SlotMessages": [
-      "gameLoadComplete",
-      "message type: \"balanceUpdate\"",
-      "message type: \"stakeUpdate\""
+  {
+    "testmessages": [
+      {
+        "supportedcurrencies": [
+          "currency:gbp",
+          "currency:eur"
+        ]
+      },
+      {
+        "gameLoadMessages": [
+          "gameLoadComplete"
+        ]
+      },
+      {
+        "balanceUpdateMessage": [
+          "balanceUpdate"
+        ]
+      },
+      {
+        "stakeUpdateMessage": [
+          "stakeUpdate"
+        ]
+      }, 
+      {
+        "depositFlowMessage": [
+          "balanceUpdate"
+        ]
+      }, 
+      {
+        "gameHelpMessage": [
+          "menuOpened", 
+          "menuClosed", 
+          "gameHelp"
+        ]
+      }, 
+      {
+        "payTableMessage": [
+          "toggle paytable"
+      ]
+    },
+    {
+      "soundCheckMessageToolBar": [
+        "sound:true",
+        "sound:false"
+      ]
+    }, 
+    {
+      "soundCheckMessageGame": [
+        "settingName:sound settingValue:on",
+        "settingName:sound settingValue:off"
+      ]
+    },
+    {
+        "stakeUpdateWithinWindowMessage": [
+          "stakeUpdate"
+        ]
+    },
+    {
+      "errorDisplayedMessage": [
+        "errorMessageDisplayed"
+      ]
+    },
+    {
+      "errorDismissedMessage": [
+        "errorMessageDismissed"
+      ]
+    }
     ]
   }
