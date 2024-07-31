@@ -46,8 +46,8 @@
     }, 
     {
       "soundCheckMessageGame": [
-        "settingName:sound settingValue:on",
-        "settingName:sound settingValue:off"
+        "\"settingName\":\"sound\",\"settingValue\":\"on\"",
+        "\"settingName\":\"sound\",\"settingValue\":\"off\""
       ]
     },
     {
