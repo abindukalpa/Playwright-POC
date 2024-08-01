@@ -12,6 +12,12 @@ if (fs.existsSync(envPath)) {
 } else {
   console.warn(`No ${envFile} file found.`);
 }
+
+export const envs = {
+  username: process.env.PLAYWRIGHT_USERNAME!,
+  password: process.env.PLAYWRIGHT_PASSWORD!,
+  url: process.env.URL!,
+};
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
