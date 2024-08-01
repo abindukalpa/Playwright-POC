@@ -1,14 +1,14 @@
   [
-    { "currencyMessageGbp": "currency:gbp" },
-    { "currencyMessageEur": "currency:eur" },
+    { "currencyMessageGbp": "\"currency\":\"GBP\"" },
+    { "currencyMessageEur": "\"currency\":\"EUR\"" },
 
     { "loadingMessage": "gameLoadComplete" },
 
-    { "balanceUpdateMessage": "balanceUpdated" },
+    { "balanceUpdateMessage": "balanceUpdate" },
 
     { "stakeUpdateMessage": "stakeUpdate" },
 
-    { "depositFlowMessage": "balanceUpdated" },
+    { "depositFlowMessage": "balanceUpdate" },
 
     { "gameHelpMenuOpen": "menuOpened"},
 
