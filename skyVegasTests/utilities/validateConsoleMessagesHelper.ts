@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test";
 import * as fs from "fs";
 
 
-let validateConsoleMessages = async (page: Page, expectedMessage: string) => {
+export let validateConsoleMessages = async (page: Page, expectedMessage: string) => {
     const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
     const jsonObject = JSON.parse(data);
     const consoleMessages: string[] = [];
@@ -30,5 +30,3 @@ let validateConsoleMessages = async (page: Page, expectedMessage: string) => {
       });
       expect(messageExists).toBe(true);
     };
-
-    export {validateConsoleMessages}

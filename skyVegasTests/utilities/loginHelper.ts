@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 
-let login = async (page:Page) => {
+export let login = async (page:Page) => {
     const userName = process.env.USERNAME!;
     const password = process.env.PASSWORD!;
     const url = process.env.URL!;
@@ -11,5 +11,4 @@ let login = async (page:Page) => {
     await page.getByRole("button", { name: "I Accept" }).click();
     await page.getByRole("button", { name: "Log in" }).click();
   };
-
-  export {login}
+  
