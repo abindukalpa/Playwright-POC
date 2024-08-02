@@ -1,6 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
 import * as fs from "fs";
-
 // TODO: Need to do win is added to balance, Need to do deposit flow payload message
 
 test("Test login works", async ({ page }) => {
@@ -32,6 +31,8 @@ test("Test login works", async ({ page }) => {
 });
 
 let validateConsoleMessages = async (page, expectedMessage) => {
+  const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
+  const jsonObject = JSON.parse(data);
   const consoleMessages: string[] = [];
     page.on("console", (msg) => {
       consoleMessages.push(msg.text());
