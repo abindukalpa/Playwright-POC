@@ -27,13 +27,9 @@ test("PragGames", async ({ page }) => {
     await page.screenshot({ path: "loginfailure.png" });
   }
 
-  await expect(page).toHaveURL(url);
-  await expect(page).toHaveTitle(
-    "Online Vegas Games | 50 Free Spins | SBG Vegas"
-  );
-  await expect(
-    page.getByText("CONGRATULATIONS TO OUR LUCKY WINNER")
-  ).toBeVisible();
+  await page.locator("a").filter({ hasText: "My Account" }).first().click(); 
+  await expect(page.getByText(userName)).toBeVisible();
+  
   await page.goto("https://skyvegas.com.nxt.ppbdev.com/c/pragmatic-games/"); //wip
   const linksCount = await page
     .getByRole("link", { name: "Real Play" })

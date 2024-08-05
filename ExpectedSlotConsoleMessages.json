@@ -1,7 +1,32 @@
-{
-    "SlotMessages": [
-      "gameLoadComplete",
-      "message type: \"balanceUpdate\"",
-      "message type: \"stakeUpdate\""
-    ]
-  }
+  [
+    { "currencyMessageGbp": "\"currency\":\"GBP\"" },
+    { "currencyMessageEur": "\"currency\":\"EUR\"" },
+
+    { "loadingMessage": "gameLoadComplete" },
+
+    { "balanceUpdateMessage": "balanceUpdate" },
+
+    { "stakeUpdateMessage": "stakeUpdate" },
+
+    { "depositFlowMessage": "balanceUpdate" },
+
+    { "gameHelpMenuOpen": "menuOpened"},
+
+    { "gameHelpMenuClose": "menuClosed" },
+
+    { "gameHelpMessage": "gameHelp"},
+
+    { "payTableMessage": "toggle paytable" },
+
+    { "soundCheckMessageToolBarOn": "\"sound\":\" true" },
+    { "soundCheckMessageToolBarOff": "\"sound\":\" false"},
+    
+    { "soundCheckMessageGameOn": "\"settingName\":\"sound\",\"settingValue\":\"on\"" },
+    { "soundCheckMessageGameOff": "\"settingName\":\"sound\",\"settingValue\":\"off\""},
+
+    { "stakeUpdateWindowMessage": "stakeUpdate"},
+
+    { "errorDisplayedMessage": "errorMessageDisplayed" },
+
+    {"errorDismissedMessage": "errorMessageDismissed" }
+  ]
