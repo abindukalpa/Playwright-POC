@@ -1,29 +1,17 @@
 import { test, expect, type Page } from "@playwright/test";
+import { launchGame, validateConsoleMessages, login } from "./utilities";
 import * as fs from "fs";
-import { validateConsoleMessages } from "./utils/consoleMessageValidator";
 
 test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
+let jsonObject;
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
-  const userName = process.env.USERNAME!;
-  const password = process.env.PASSWORD!;
-  const url = process.env.URL!;
+  const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
+  jsonObject = JSON.parse(data);
   page = await browser.newPage();
-  await page.goto(url!);
-  await page.getByRole("link", { name: "Log In" }).click();
-  await page.getByLabel("Username").fill(userName);
-  await page.getByLabel("PIN").fill(password);
-  page.getByRole("button", { name: "Log in" }).focus;
-
-  if (process.env.NODE_ENV == "live") {
-    await page.getByRole("button", { name: "Log in" }).click();
-    await page.getByText("I don't want to change it").click();
-  } else {
-    await page.getByRole("button", { name: "I Accept" }).click();
-    await page.getByRole("button", { name: "Log in" }).click();
-  }
+  await login(page);
 });
 
 test.afterAll(async () => {
@@ -31,16 +19,7 @@ test.afterAll(async () => {
 });
 
 test("Test game menu open", async ({}) => {
-  await page.getByText("Search for games...").click();
-  await new Promise((r) => setTimeout(r, 2000));
-  await page
-    .getByPlaceholder("Search for games...")
-    .waitFor({ state: "attached" });
-  await page.getByPlaceholder("Search for games...").fill("Big Bass Splash");
-  await page.locator(".tile-footer-wrapper").first().waitFor();
-  await new Promise((r) => setTimeout(r, 2000));
-  await page.locator(".tile-footer-wrapper").first().click();
-
+  await launchGame(page, "Big Bass Splash");
   page.on("console", (msg) => {
     consoleMessages.push(msg.text());
   });
@@ -51,14 +30,10 @@ test("Test game menu open", async ({}) => {
     .frameLocator("#root iframe")
     .getByText("MenuOpen the menu to access")
     .click();
-  validateConsoleMessages(
-    page,
-    '[Game Window -> Game Client] send notification: "menuOpened"',
-    consoleMessages
-  );
+  validateConsoleMessages(page, jsonObject.gameHelpMenuOpen, consoleMessages);
 });
 
-test("Test game help menu open", async ({}) => {
+test("Test help menu open", async ({}) => {
   await page
     .frameLocator("#root iframe")
     .getByRole("link", { name: "Game Help" })
@@ -67,11 +42,7 @@ test("Test game help menu open", async ({}) => {
     .frameLocator("#root iframe")
     .getByRole("link", { name: "Game Help" })
     .click();
-  validateConsoleMessages(
-    page,
-    '[Game Window -> Game Client] send notification: "gameHelp"',
-    consoleMessages
-  );
+  validateConsoleMessages(page, jsonObject.gameHelpMessage, consoleMessages);
 });
 
 test("Test game menu closed", async ({}) => {
@@ -80,9 +51,17 @@ test("Test game menu closed", async ({}) => {
     .getByText("MenuOpen the menu to access")
     .click();
 
-  validateConsoleMessages(
-    page,
-    '[Game Window -> Game Client] send notification: "menuClosed"',
-    consoleMessages
-  );
+  validateConsoleMessages(page, jsonObject.gameHelpMenuClose, consoleMessages);
+});
+
+test("Test paytable open", async ({}) => {
+  await page
+    .frameLocator("#root iframe")
+    .getByRole("link", { name: "Game Help" })
+    .waitFor();
+  await page
+    .frameLocator("#root iframe")
+    .getByRole("link", { name: "Paytable" })
+    .click();
+  validateConsoleMessages(page, jsonObject.payTableMessage, consoleMessages);
 });

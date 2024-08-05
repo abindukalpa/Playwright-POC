@@ -1,32 +1,42 @@
-  [
-    { "currencyMessageGbp": "\"currency\":\"GBP\"" },
-    { "currencyMessageEur": "\"currency\":\"EUR\"" },
+[
+  { "currencyMessageGbp": "\"currency\":\"GBP\"" },
+  { "currencyMessageEur": "\"currency\":\"EUR\"" },
 
-    { "loadingMessage": "gameLoadComplete" },
+  { "loadingMessage": "gameLoadComplete" },
 
-    { "balanceUpdateMessage": "balanceUpdate" },
+  { "balanceUpdateMessage": "balanceUpdate" },
 
-    { "stakeUpdateMessage": "stakeUpdate" },
+  { "stakeUpdateMessage": "stakeUpdate" },
 
-    { "depositFlowMessage": "balanceUpdate" },
+  { "depositFlowMessage": "balanceUpdate" },
 
-    { "gameHelpMenuOpen": "menuOpened"},
+  {
+    "gameHelpMenuOpen": "[Game Window -> Game Client] send notification: \"menuOpened\""
+  },
 
-    { "gameHelpMenuClose": "menuClosed" },
+  {
+    "gameHelpMenuClose": "[Game Window -> Game Client] send notification: \"menuClosed\""
+  },
 
-    { "gameHelpMessage": "gameHelp"},
+  {
+    "gameHelpMessage": "[Game Window -> Game Client] send notification: \"gameHelp\""
+  },
 
-    { "payTableMessage": "toggle paytable" },
+  { "payTableMessage": "toggle paytable" },
 
-    { "soundCheckMessageToolBarOn": "\"sound\":\" true" },
-    { "soundCheckMessageToolBarOff": "\"sound\":\" false"},
-    
-    { "soundCheckMessageGameOn": "\"settingName\":\"sound\",\"settingValue\":\"on\"" },
-    { "soundCheckMessageGameOff": "\"settingName\":\"sound\",\"settingValue\":\"off\""},
+  { "soundCheckMessageToolBarOn": "\"sound\":\" true" },
+  { "soundCheckMessageToolBarOff": "\"sound\":\" false" },
 
-    { "stakeUpdateWindowMessage": "stakeUpdate"},
+  {
+    "soundCheckMessageGameOn": "\"settingName\":\"sound\",\"settingValue\":\"on\""
+  },
+  {
+    "soundCheckMessageGameOff": "\"settingName\":\"sound\",\"settingValue\":\"off\""
+  },
 
-    { "errorDisplayedMessage": "errorMessageDisplayed" },
+  { "stakeUpdateWindowMessage": "stakeUpdate" },
 
-    {"errorDismissedMessage": "errorMessageDismissed" }
-  ]
+  { "errorDisplayedMessage": "errorMessageDisplayed" },
+
+  { "errorDismissedMessage": "errorMessageDismissed" }
+]
