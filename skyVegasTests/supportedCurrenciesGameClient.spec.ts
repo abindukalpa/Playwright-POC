@@ -7,15 +7,15 @@ test("supportedCurrencies", async ({ page }) => {
   const jsonObject = JSON.parse(data);
   let consoleMessages: string[] = [];
   await login(page);
-  await launchGame(page, "Big Bass Splash");
   page.on("console", (msg) => {
     consoleMessages.push(msg.text());
-  });
-
+});
+  await launchGame(page, "Big Bass Splash");
+  
   await validateConsoleMessages(
     page,
     //jsonObject.currencyMessageGbp,
     '"currency":"GBP"',
     consoleMessages
   );
-});
+  });

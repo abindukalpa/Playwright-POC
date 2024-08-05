@@ -19,10 +19,10 @@ test.afterAll(async () => {
 });
 
 test("Test game menu open", async ({}) => {
-  await launchGame(page, "Big Bass Splash");
   page.on("console", (msg) => {
     consoleMessages.push(msg.text());
   });
+  await launchGame(page, "Big Bass Splash");
   await expect(
     page.frameLocator("#root iframe").getByText("MenuOpen the menu to access")
   ).toBeAttached();
