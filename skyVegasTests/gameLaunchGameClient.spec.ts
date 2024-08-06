@@ -16,7 +16,6 @@ test("gameLaunch", async ({ page }) => {
 
   await validateConsoleMessages(
     page,
-    //jsonObject.currencyMessageGbp,
     "gameLoadComplete",
     consoleMessages
   );
