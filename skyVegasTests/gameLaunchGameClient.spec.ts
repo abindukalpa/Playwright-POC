@@ -9,14 +9,13 @@ test("gameLaunch", async ({ page }) => {
   await login(page);
   page.on("console", (msg) => {
     consoleMessages.push(msg.text());
-});
+  });
 
   await launchGame(page, "Big Bass Splash");
-
 
   await validateConsoleMessages(
     page,
     "gameLoadComplete",
     consoleMessages
   );
-  });
+});
