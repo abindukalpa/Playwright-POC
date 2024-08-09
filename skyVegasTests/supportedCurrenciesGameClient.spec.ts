@@ -14,8 +14,7 @@ test("supportedCurrencies", async ({ page }) => {
   
   await validateConsoleMessages(
     page,
-    //jsonObject.currencyMessageGbp,
-    '"currency":"GBP"',
+    jsonObject.currencyMessageGbp,
     consoleMessages
   );
   });
