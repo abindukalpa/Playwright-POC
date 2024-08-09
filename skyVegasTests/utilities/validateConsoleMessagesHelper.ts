@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { error } from "console";
 import * as fs from "fs";
 
 export let validateConsoleMessages = async (
@@ -6,6 +7,9 @@ export let validateConsoleMessages = async (
   expectedMessage: string,
   consoleMessages: string[]
 ) => {
+  if (expectedMessage === undefined){
+    throw new Error("expected message is null")
+  }
   await expect(async () => {
     const messageExists = consoleMessages.some((msg) =>
       msg.includes(expectedMessage)

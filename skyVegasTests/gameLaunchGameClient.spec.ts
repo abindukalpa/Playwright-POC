@@ -16,7 +16,7 @@ test("gameLaunch", async ({ page }) => {
 
   await validateConsoleMessages(
     page,
-    "gameLoadComplete",
+    jsonObject.loadingMessage,
     consoleMessages
   );
   });
