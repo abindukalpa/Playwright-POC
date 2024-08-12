@@ -1,18 +1,17 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, type Page } from "@playwright/test";
 import { launchGame, validateConsoleMessages, login } from "./utilities";
 import * as fs from "fs";
-import { text } from "stream/consumers";
 
 test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
-let jsonObject;
+let expectedMessages;
 let page: Page;
-const textValues = JSON.parse(fs.readFileSync("games.json", "utf-8"));
-textValues.forEach((textValue) => {
-  test.describe(`Testing with text: ${textValue}`, () => {
+const games = JSON.parse(fs.readFileSync("games.json", "utf-8"));
+games.forEach((game) => {
+  test.describe(`Testing with text: ${game}`, () => {
     test.beforeAll(async ({ browser }) => {
       const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
-      jsonObject = JSON.parse(data);
+      expectedMessages = JSON.parse(data);
       page = await browser.newPage();
       await login(page);
     });
@@ -25,26 +24,26 @@ textValues.forEach((textValue) => {
       page.on("console", (msg) => {
         consoleMessages.push(msg.text());
       });
-      await launchGame(page, textValue);
-      if (jsonObject.soundCheckMessageToolBarOn) {
+      await launchGame(page, game);
+      if (expectedMessages.soundCheckMessageToolBarOn) {
         await(
             page
             .frameLocator('#root iframe').locator('i').nth(2)
             .click());
         validateConsoleMessages(
         page,
-        jsonObject.soundCheckMessageToolBarOff,
+        expectedMessages.soundCheckMessageToolBarOff,
         consoleMessages
         );
       }
-      else if(jsonObject.soundCheckMessageToolBarOff) {
+      else if(expectedMessages.soundCheckMessageToolBarOff) {
         await(
             page
               .frameLocator('#root iframe').locator('i').nth(2)
               .click());
           validateConsoleMessages(
             page,
-            jsonObject.soundCheckMessageToolBarOn,
+            expectedMessages.soundCheckMessageToolBarOn,
             consoleMessages
             );
       }
