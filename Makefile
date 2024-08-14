@@ -16,7 +16,7 @@ $(INSTALL_STAMP): package.json package-lock.json
 	npx husky install
 	touch $(INSTALL_STAMP)
 
-linter-fix:
+lint:
 	npx eslint --fix
 
 format: install

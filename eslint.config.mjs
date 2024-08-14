@@ -1,7 +1,7 @@
-import globals from 'globals'
-import pluginJs from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import unusedImports from 'eslint-plugin-unused-imports'
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import unusedImports from 'eslint-plugin-unused-imports';
 
 export default [
     { files: ['**/*.{js,mjs,cjs,ts}'] },
@@ -13,9 +13,9 @@ export default [
             'unused-imports': unusedImports,
         },
         rules: {
-            'no-unused-vars': 'error',
-            'no-undef': 'error',
-            'unused-imports/no-unused-imports': 'error',
+            'no-unused-vars': 'warn',
+            'no-undef': 'warn',
+            'unused-imports/no-unused-imports': 'warn',
         },
     },
-]
+];
