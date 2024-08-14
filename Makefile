@@ -1,21 +1,28 @@
+#stop npm installing for every locally run command but still being a dependency before they can be run first
+INSTALL_STAMP = .npm_installed
+
 test: install
 	npx playwright test
 
 debug: install
-	npx playwright test --debug	
-	
-install:
+	npx playwright test --debug
+
+install: $(INSTALL_STAMP)
+
+$(INSTALL_STAMP): package.json package-lock.json
 	npm install
 	npx playwright install
+	npm install --save-dev prettier husky lint-staged
+	touch $(INSTALL_STAMP)
 
-image-run: image-build
-	docker run playwright-poc
+format: install
+	npm run format
 
 image-build:
 	docker build -t playwright-poc .
 
-format: format-install
-	npx prettier . --write
+image-run: image-build
+	docker run playwright-poc
 
-format-install:
-	npm install --save-dev --save-exact prettier
+clean:
+	rm -rf node_modules $(INSTALL_STAMP)
