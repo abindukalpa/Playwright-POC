@@ -13,6 +13,7 @@ $(INSTALL_STAMP): package.json package-lock.json
 	npm install
 	npx playwright install
 	npm install --save-dev prettier husky lint-staged
+	npx husky install
 	touch $(INSTALL_STAMP)
 
 format: install

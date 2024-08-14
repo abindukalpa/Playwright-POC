@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "testlive": "NODE_ENV=live npx playwright test",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
