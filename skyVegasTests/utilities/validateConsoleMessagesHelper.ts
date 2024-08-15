@@ -1,9 +1,6 @@
-import { test, expect, type Page } from "@playwright/test";
-import { error } from "console";
-import * as fs from "fs";
+import { expect } from "@playwright/test";
 
-export let validateConsoleMessages = async (
-  page: Page,
+export const validateConsoleMessages = async (
   expectedMessage: string,
   consoleMessages: string[]
 ) => {
@@ -12,7 +9,7 @@ export let validateConsoleMessages = async (
   }
   await expect(async () => {
     const messageExists = consoleMessages.some((msg) =>
-      msg.includes(expectedMessage)
+        msg.includes(expectedMessage)
     );
     expect(messageExists).toBe(true);
   }).toPass({

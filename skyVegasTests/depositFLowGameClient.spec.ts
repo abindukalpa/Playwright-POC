@@ -12,8 +12,8 @@ games.forEach((game) => {
     test.beforeAll(async ({ browser }) => {
       const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
       expectedMessages = JSON.parse(data);
-    //   page = await browser.newPage();
-    //   await login(page);
+      page = await browser.newPage();
+      await login(page);
     });
 
     test.afterAll(async () => {
@@ -21,8 +21,6 @@ games.forEach((game) => {
     });
 
     test("Test deposit flow", async ({browser}) => {
-        page = await browser.newPage();
-        await login(page);
         page.on("console", (msg) => {
             consoleMessages.push(msg.text());
         });
@@ -33,7 +31,6 @@ games.forEach((game) => {
         .click();
 
         validateConsoleMessages(
-            page,
             "work pls",
             consoleMessages
         );
@@ -57,16 +54,15 @@ games.forEach((game) => {
         await userCreationPage
         .getByRole('button', { name: 'Deposit' })
         .click()
-        await userCreationPage.close
+        await userCreationPage.close()
         await page
         .frameLocator('#root iframe')
         .locator('.sprite')
         .click();
-        // validateConsoleMessages(
-        //     page,
-        //     "work pls",
-        //     consoleMessages
-        // );
+        await validateConsoleMessages(
+            expectedMessages.depositMessage,
+            consoleMessages
+        );
         // validateConsoleMessages(
         //     page,
         //     expectedMessages.balanceUpdateMessage,

@@ -20,22 +20,20 @@ games.forEach((game) => {
       await page.close();
     });
 
-    test("Test sound toggle", async ({}) => {
+    test("Test sound toggle", async () => {
       page.on("console", (msg) => {
         consoleMessages.push(msg.text());
       });
       await launchGame(page, game);
       if (expectedMessages.soundCheckMessageToolBarOn) {
         await page.frameLocator("#root iframe").locator("i").nth(2).click();
-        validateConsoleMessages(
-          page,
+        await validateConsoleMessages(
           expectedMessages.soundCheckMessageToolBarOff,
           consoleMessages
         );
       } else if (expectedMessages.soundCheckMessageToolBarOff) {
         await page.frameLocator("#root iframe").locator("i").nth(2).click();
-        validateConsoleMessages(
-          page,
+        await validateConsoleMessages(
           expectedMessages.soundCheckMessageToolBarOn,
           consoleMessages
         );

@@ -1,6 +1,6 @@
-import { test, expect, type Page } from "@playwright/test";
+import {type Page } from "@playwright/test";
 
-export let launchGame = async (page: Page, gameName) => {
+export const launchGame = async (page: Page, gameName) => {
     await page.getByText('Search for games...').click();
     await new Promise(r => setTimeout(r, 2000));
     await page.getByPlaceholder('Search for games...').fill(gameName);
