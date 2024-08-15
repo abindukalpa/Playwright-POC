@@ -15,5 +15,6 @@
   "soundCheckMessageGameOff": "\"settingName\":\"sound\",\"settingValue\":\"off\"",
   "stakeUpdateWindowMessage": "stakeUpdate",
   "errorDisplayedMessage": "errorMessageDisplayed",
-  "errorDismissedMessage": "errorMessageDismissed"
+  "errorDismissedMessage": "errorMessageDismissed",
+  "realityCheckMessage": "REALITY_CHECK_ELAPSED_ERROR"
 }
