@@ -15,5 +15,6 @@
   "soundCheckMessageGameOff": "\"settingName\":\"sound\",\"settingValue\":\"off\"",
   "stakeUpdateWindowMessage": "stakeUpdate",
   "errorDisplayedMessage": "errorMessageDisplayed",
-  "errorDismissedMessage": "errorMessageDismissed"
+  "errorDismissedMessage": "errorMessageDismissed",
+  "depositMessage": "send balance changed"
 }

@@ -26,26 +26,19 @@ games.forEach((game) => {
       });
       await launchGame(page, game);
       if (expectedMessages.soundCheckMessageToolBarOn) {
-        await(
-            page
-            .frameLocator('#root iframe').locator('i').nth(2)
-            .click());
+        await page.frameLocator("#root iframe").locator("i").nth(2).click();
         validateConsoleMessages(
-        page,
-        expectedMessages.soundCheckMessageToolBarOff,
-        consoleMessages
+          page,
+          expectedMessages.soundCheckMessageToolBarOff,
+          consoleMessages
         );
-      }
-      else if(expectedMessages.soundCheckMessageToolBarOff) {
-        await(
-            page
-              .frameLocator('#root iframe').locator('i').nth(2)
-              .click());
-          validateConsoleMessages(
-            page,
-            expectedMessages.soundCheckMessageToolBarOn,
-            consoleMessages
-            );
+      } else if (expectedMessages.soundCheckMessageToolBarOff) {
+        await page.frameLocator("#root iframe").locator("i").nth(2).click();
+        validateConsoleMessages(
+          page,
+          expectedMessages.soundCheckMessageToolBarOn,
+          consoleMessages
+        );
       }
     });
   });
