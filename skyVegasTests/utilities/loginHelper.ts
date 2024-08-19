@@ -1,10 +1,10 @@
-import { test, expect, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
+const userName = String(process.env.USERNAME);
+const password = String(process.env.PASSWORD);
+const url = String(process.env.URL);
 
-export let login = async (page:Page) => {
-    const userName = process.env.USERNAME!;
-    const password = process.env.PASSWORD!;
-    const url = process.env.URL!;
-    await page.goto(url!);
+export const login = async (page:Page) => {
+    await page.goto(url);
     await page.getByRole("link", { name: "Log In" }).click();
     await page.getByLabel("Username").fill(userName);
     await page.getByLabel("PIN").fill(password);

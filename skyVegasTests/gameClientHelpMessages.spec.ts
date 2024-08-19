@@ -1,7 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import { launchGame, validateConsoleMessages, login } from "./utilities";
 import * as fs from "fs";
-import { text } from "stream/consumers";
 
 test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
@@ -22,7 +21,7 @@ textValues.forEach((textValue) => {
     });
     // Iterate over the array and create a test for each value
 
-    test("Test game menu open", async ({}) => {
+    test("Test game menu open", async () => {
       page.on("console", (msg) => {
         consoleMessages.push(msg.text());
       });
@@ -36,14 +35,13 @@ textValues.forEach((textValue) => {
         .frameLocator("#root iframe")
         .getByText("MenuOpen the menu to access")
         .click();
-      validateConsoleMessages(
-        page,
+      await validateConsoleMessages(
         jsonObject.gameHelpMenuOpen,
         consoleMessages
       );
     });
 
-    test("Test help menu open", async ({}) => {
+    test("Test help menu open", async () => {
       await page
         .frameLocator("#root iframe")
         .getByRole("link", { name: "Game Help" })
@@ -52,27 +50,25 @@ textValues.forEach((textValue) => {
         .frameLocator("#root iframe")
         .getByRole("link", { name: "Game Help" })
         .click();
-      validateConsoleMessages(
-        page,
+      await validateConsoleMessages(
         jsonObject.gameHelpMessage,
         consoleMessages
       );
     });
 
-    test("Test game menu closed", async ({}) => {
+    test("Test game menu closed", async () => {
       await page
         .frameLocator("#root iframe")
         .getByText("MenuOpen the menu to access")
         .click();
 
-      validateConsoleMessages(
-        page,
+      await validateConsoleMessages(
         jsonObject.gameHelpMenuClose,
         consoleMessages
       );
     });
 
-    test("Test paytable open", async ({}) => {
+    test("Test paytable open", async () => {
       await page
         .frameLocator("#root iframe")
         .getByRole("link", { name: "Game Help" })
@@ -81,8 +77,7 @@ textValues.forEach((textValue) => {
         .frameLocator("#root iframe")
         .getByRole("link", { name: "Paytable" })
         .click();
-      validateConsoleMessages(
-        page,
+      await validateConsoleMessages(
         jsonObject.payTableMessage,
         consoleMessages
       );
