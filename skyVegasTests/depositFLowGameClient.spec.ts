@@ -63,11 +63,6 @@ games.forEach((game) => {
             expectedMessages.depositMessage,
             consoleMessages
         );
-        // validateConsoleMessages(
-        //     page,
-        //     expectedMessages.balanceUpdateMessage,
-        //     consoleMessages
-        // )
     });
   });
 });
