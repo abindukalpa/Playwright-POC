@@ -8,3 +8,4 @@ node_modules/
 .env.nxt
 *.png
 .npm_installed
+.image_built
