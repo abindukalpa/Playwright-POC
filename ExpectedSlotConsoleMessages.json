@@ -16,5 +16,8 @@
   "stakeUpdateWindowMessage": "stakeUpdate",
   "errorDisplayedMessage": "errorMessageDisplayed",
   "errorDismissedMessage": "errorMessageDismissed",
-  "realityCheckMessage": "REALITY_CHECK_ELAPSED_ERROR"
+  "realityCheckMessage": "REALITY_CHECK_ELAPSED_ERROR",
+  "depositMessage": "send balance changed",
+  "startSpin": "gameAnimationStart",
+  "endSpin": "gameAnimationComplete"
 }

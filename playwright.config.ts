@@ -2,7 +2,6 @@ import { defineConfig, devices } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
 import * as dotenv from "dotenv";
-require("dotenv").config();
 
 const envFile = `.env.${process.env.NODE_ENV || "nxt"}`;
 const envPath = path.resolve(process.cwd(), envFile);

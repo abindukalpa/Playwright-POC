@@ -1,6 +1,7 @@
 import { test, type Page } from "@playwright/test";
 import { launchGame, validateConsoleMessages, login } from "./utilities";
 import * as fs from "fs";
+import { messageExists } from "./utilities/validateConsoleMessagesHelper";
 
 test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
@@ -20,32 +21,24 @@ games.forEach((game) => {
       await page.close();
     });
 
-    test("Test sound toggle", async ({}) => {
+    test("Test sound toggle", async () => {
+      const soundToggleGameWindow = page.frameLocator("#root iframe").locator("i").nth(2)
       page.on("console", (msg) => {
         consoleMessages.push(msg.text());
       });
-      await launchGame(page, game);
-      if (expectedMessages.soundCheckMessageToolBarOn) {
-        await(
-            page
-            .frameLocator('#root iframe').locator('i').nth(2)
-            .click());
-        validateConsoleMessages(
-        page,
-        expectedMessages.soundCheckMessageToolBarOff,
-        consoleMessages
+      await launchGame(page, game, consoleMessages);
+      if (messageExists(consoleMessages, expectedMessages.soundCheckMessageToolBarOn)) {
+        await soundToggleGameWindow.click();
+        await validateConsoleMessages(
+          expectedMessages.soundCheckMessageToolBarOff,
+          consoleMessages
         );
-      }
-      else if(expectedMessages.soundCheckMessageToolBarOff) {
-        await(
-            page
-              .frameLocator('#root iframe').locator('i').nth(2)
-              .click());
-          validateConsoleMessages(
-            page,
-            expectedMessages.soundCheckMessageToolBarOn,
-            consoleMessages
-            );
+      } else if (messageExists(consoleMessages, expectedMessages.soundCheckMessageToolBarOff)) {
+        await soundToggleGameWindow.click();
+        await validateConsoleMessages(
+          expectedMessages.soundCheckMessageToolBarOn,
+          consoleMessages
+        );
       }
     });
   });
