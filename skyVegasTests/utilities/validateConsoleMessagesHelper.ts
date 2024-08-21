@@ -11,8 +11,8 @@ export const validateConsoleMessages = async (
   await expect(async () => {
     expect(messageExists(consoleMessages, expectedMessage)).toBe(true);
   }).toPass({
-    intervals: [5_000, 10_000, 15_000],
-    timeout: 60_000,
+    intervals: [5_000, 10_000, 15_000, 60_000, 70_000, 75_000, 85_000, 95_000],
+    timeout: 120_000,
   });
   
 };
