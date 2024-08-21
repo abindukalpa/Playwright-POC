@@ -16,5 +16,7 @@
   "stakeUpdateWindowMessage": "stakeUpdate",
   "errorDisplayedMessage": "errorMessageDisplayed",
   "errorDismissedMessage": "errorMessageDismissed",
-  "depositMessage": "send balance changed"
+  "depositMessage": "send balance changed",
+  "startSpin": "gameAnimationStart",
+  "endSpin": "gameAnimationComplete"
 }
