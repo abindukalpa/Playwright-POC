@@ -13,8 +13,5 @@ test('gameLaunch', async ({ page }) => {
 
     await launchGame(page, 'Big Bass Splash');
 
-  await validateConsoleMessages(
-    jsonObject.loadingMessage,
-    consoleMessages
-  );
-  });
+    await validateConsoleMessages(jsonObject.loadingMessage, consoleMessages);
+});

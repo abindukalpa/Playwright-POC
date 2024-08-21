@@ -1,4 +1,4 @@
-import {type Page } from "@playwright/test";
+import { type Page } from '@playwright/test';
 
 export const launchGame = async (page: Page, gameName) => {
     await page.getByText('Search for games...').click();
