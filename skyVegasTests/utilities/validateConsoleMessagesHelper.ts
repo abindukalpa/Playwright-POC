@@ -14,4 +14,5 @@ export const validateConsoleMessages = async (
     intervals: [5_000, 10_000, 15_000],
     timeout: 60_000,
   });
+  
 };

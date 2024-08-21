@@ -1,6 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import { launchGame, validateConsoleMessages, login } from "./utilities";
 import * as fs from "fs";
+import { startEventListener } from "./utilities/starteventListenerHelper";
 
 test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
@@ -22,9 +23,7 @@ games.forEach((game) => {
     // Iterate over the array and create a test for each value
 
     test("Test game menu open", async () => {
-      page.on("console", (msg) => {
-        consoleMessages.push(msg.text());
-      });
+      startEventListener(page, consoleMessages);
       await launchGame(page, game, consoleMessages);
       await expect(
         page

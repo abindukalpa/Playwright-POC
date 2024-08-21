@@ -11,7 +11,7 @@ test("gameLaunch", async ({ page }) => {
     consoleMessages.push(msg.text());
 });
 
-  await launchGame(page, "Big Bass Splash");
+  await launchGame(page, "Big Bass Splash", consoleMessages);
 
 
   await validateConsoleMessages(

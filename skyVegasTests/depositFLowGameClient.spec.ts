@@ -2,6 +2,7 @@ import { test, type Page } from "@playwright/test";
 import { launchGame, validateConsoleMessages, login } from "./utilities";
 import * as fs from "fs";
 import { config } from "../config/config";
+import { startEventListener } from "./utilities/starteventListenerHelper";
 
 test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
@@ -22,10 +23,8 @@ games.forEach((game) => {
     });
 
     test("Test deposit flow", async ({browser}) => {
-        page.on("console", (msg) => {
-            consoleMessages.push(msg.text());
-        });
-        await launchGame(page, game);
+        startEventListener(page, consoleMessages);
+        await launchGame(page, game, consoleMessages);
         await page
         .frameLocator('#root iframe')
         .getByRole('button', { name: 'Deposit' })

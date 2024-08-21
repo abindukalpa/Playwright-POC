@@ -26,7 +26,7 @@ games.forEach((game) => {
       page.on("console", (msg) => {
         consoleMessages.push(msg.text());
       });
-      await launchGame(page, game);
+      await launchGame(page, game, consoleMessages);
       if (messageExists(consoleMessages, expectedMessages.soundCheckMessageToolBarOn)) {
         await soundToggleGameWindow.click();
         await validateConsoleMessages(

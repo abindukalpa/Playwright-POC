@@ -1,17 +1,19 @@
 import { test, type Page } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login } from "./utilities";
+import { launchGame, login, validateConsoleMessages } from "./utilities";
 import * as fs from "fs";
+import { makeSpin } from "./utilities/makeSpinHelper";
+import { startEventListener } from "./utilities/starteventListenerHelper";
 
 test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
-let jsonObject;
+let expectedMessages;
 let page: Page;
 const games = JSON.parse(fs.readFileSync("games.json", "utf-8"));
 games.forEach((game) => {
   test.describe(`Testing with text: ${game}`, () => {
     test.beforeAll(async ({ browser }) => {
       const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
-      jsonObject = JSON.parse(data);
+      expectedMessages = JSON.parse(data);
       page = await browser.newPage();
       await login(page);
       
@@ -21,24 +23,11 @@ games.forEach((game) => {
       await page.close();
     });
 
-    test("makeSpin", async () => {
-      page.on("console", (msg) => {
-        consoleMessages.push(msg.text());
-      });
-    
-    await launchGame(page, game, consoleMessages);
-
-    await page.mouse.click(300,300 , { delay: 10 })
-
-    await page.keyboard.press("Enter", { delay: 1500 });
-
-    await page.keyboard.press("Enter", { delay: 10 });
-
-    console.log(consoleMessages.slice(-20))
-    await validateConsoleMessages(
-        jsonObject.endSpin,
-        consoleMessages
-    )
+    test("gamePlay", async () => {
+      startEventListener(page, consoleMessages);
+      await launchGame(page, game, consoleMessages);
+      await makeSpin(page, expectedMessages.startSpin, consoleMessages);
+      await validateConsoleMessages(expectedMessages.endSpin, consoleMessages);
     });
   });
 });
