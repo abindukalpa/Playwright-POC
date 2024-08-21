@@ -6,8 +6,8 @@ import unusedImports from 'eslint-plugin-unused-imports';
 export default [
     { files: ['**/*.{js,mjs,cjs,ts}'] },
     { languageOptions: { globals: globals.node } },
-    pluginJs.configs.recommended,
-    ...tseslint.configs.recommended,
+    pluginJs.configs.strict,
+    ...tseslint.configs.stylistic,
     {
         plugins: {
             'unused-imports': unusedImports,
