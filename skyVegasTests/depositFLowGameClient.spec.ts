@@ -1,6 +1,7 @@
 import { test, type Page } from "@playwright/test";
 import { launchGame, validateConsoleMessages, login } from "./utilities";
 import * as fs from "fs";
+import { config } from "../config/config";
 
 test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
@@ -29,12 +30,6 @@ games.forEach((game) => {
         .frameLocator('#root iframe')
         .getByRole('button', { name: 'Deposit' })
         .click();
-
-        validateConsoleMessages(
-            "work pls",
-            consoleMessages
-        );
-
         const userCreationPage = await browser.newPage();
         await userCreationPage.goto("https://uct.dev.betfair/");
         await userCreationPage
@@ -46,7 +41,7 @@ games.forEach((game) => {
         await userCreationPage
         .getByRole('row', { name: 'Account ID' })
         .getByRole('textbox')
-        .fill("701999477");
+        .fill(config.getAccountID());
         await userCreationPage
         .getByRole('row', { name: 'Amount' })
         .getByRole('textbox')

@@ -6,9 +6,9 @@ test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
 let jsonObject;
 let page: Page;
-const textValues = JSON.parse(fs.readFileSync("games.json", "utf-8"));
-textValues.forEach((textValue) => {
-  test.describe(`Testing with text: ${textValue}`, () => {
+const games = JSON.parse(fs.readFileSync("games.json", "utf-8"));
+games.forEach((game) => {
+  test.describe(`Testing with text: ${game}`, () => {
     test.beforeAll(async ({ browser }) => {
       const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
       jsonObject = JSON.parse(data);
@@ -25,7 +25,7 @@ textValues.forEach((textValue) => {
       page.on("console", (msg) => {
         consoleMessages.push(msg.text());
       });
-      await launchGame(page, textValue);
+      await launchGame(page, game, consoleMessages);
       await expect(
         page
           .frameLocator("#root iframe")
