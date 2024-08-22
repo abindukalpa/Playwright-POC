@@ -1,10 +1,7 @@
 import { test, type Page } from "@playwright/test";
-import { launchGame, login, validateConsoleMessages } from "./utilities";
+import { launchGame, login, validateConsoleMessages, startEventListener, makeSpin } from "./utilities";
 import * as fs from "fs";
-import { makeSpin } from "./utilities/makeSpinHelper";
-import { startEventListener } from "./utilities/starteventListenerHelper";
 
-test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
 let expectedMessages;
 let page: Page;

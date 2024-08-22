@@ -1,7 +1,6 @@
 import { test } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login } from "./utilities";
+import { launchGame, validateConsoleMessages, login, startEventListener } from "./utilities";
 import * as fs from "fs";
-import { startEventListener } from "./utilities/starteventListenerHelper";
 
 test("supportedCurrencies", async ({ page }) => {
   const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");

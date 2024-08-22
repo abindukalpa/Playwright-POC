@@ -1,8 +1,7 @@
 import { test, type Page } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login } from "./utilities";
+import { launchGame, validateConsoleMessages, login, startEventListener, makeSpin } from "./utilities";
 import * as fs from "fs";
-import { startEventListener } from "./utilities/starteventListenerHelper";
-import { makeSpin } from "./utilities/makeSpinHelper";
+
 
 test("realityCheck", async ({ page }) => {
     const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
@@ -23,7 +22,9 @@ test("realityCheck", async ({ page }) => {
 
     await validateConsoleMessages(
         expectedMessages.realityCheckMessage,
-        consoleMessages
+        consoleMessages,
+        [65_000, 70_000, 75_000],
+        120_000
     )
 
     await page.close();

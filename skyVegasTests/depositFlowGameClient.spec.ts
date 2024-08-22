@@ -1,10 +1,7 @@
 import { test, type Page } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login } from "./utilities";
+import { launchGame, validateConsoleMessages, login, startEventListener, makeDeposit } from "./utilities";
 import * as fs from "fs";
-import { config } from "../config/config";
-import { startEventListener } from "./utilities/starteventListenerHelper";
 
-test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
 let expectedMessages;
 let page: Page;
@@ -29,26 +26,8 @@ games.forEach((game) => {
         .frameLocator('#root iframe')
         .getByRole('button', { name: 'Deposit' })
         .click();
-        const userCreationPage = await browser.newPage();
-        await userCreationPage.goto("https://uct.dev.betfair/");
-        await userCreationPage
-        .getByRole('link', { name: 'Make Deposit' })
-        .click();
-        await userCreationPage
-        .getByRole('combobox')
-        .selectOption("SKYBET");
-        await userCreationPage
-        .getByRole('row', { name: 'Account ID' })
-        .getByRole('textbox')
-        .fill(config.getAccountID());
-        await userCreationPage
-        .getByRole('row', { name: 'Amount' })
-        .getByRole('textbox')
-        .fill("10");
-        await userCreationPage
-        .getByRole('button', { name: 'Deposit' })
-        .click()
-        await userCreationPage.close()
+    
+        await makeDeposit(browser);
         await page
         .frameLocator('#root iframe')
         .locator('.sprite')

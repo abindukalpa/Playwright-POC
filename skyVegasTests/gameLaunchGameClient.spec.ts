@@ -1,5 +1,5 @@
 import { test } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login } from "./utilities";
+import { launchGame, validateConsoleMessages, login, startEventListener } from "./utilities";
 import * as fs from "fs";
 
 test("gameLaunch", async ({ page }) => {
@@ -7,9 +7,7 @@ test("gameLaunch", async ({ page }) => {
   const jsonObject = JSON.parse(data);
   const consoleMessages: string[] = [];
   await login(page);
-  page.on("console", (msg) => {
-    consoleMessages.push(msg.text());
-});
+  startEventListener(page, consoleMessages);
 
   await launchGame(page, "Big Bass Splash", consoleMessages);
 

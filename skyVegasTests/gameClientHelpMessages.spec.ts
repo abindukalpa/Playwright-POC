@@ -1,9 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login } from "./utilities";
+import { launchGame, validateConsoleMessages, login, startEventListener } from "./utilities";
 import * as fs from "fs";
-import { startEventListener } from "./utilities/starteventListenerHelper";
 
-test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
 let jsonObject;
 let page: Page;
