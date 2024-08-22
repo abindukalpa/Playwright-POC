@@ -1,9 +1,7 @@
 import { test, type Page } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login } from "./utilities";
+import { launchGame, validateConsoleMessages, login, startEventListener, messageExists } from "./utilities";
 import * as fs from "fs";
-import { messageExists } from "./utilities/validateConsoleMessagesHelper";
 
-test.describe.configure({ mode: "serial" });
 const consoleMessages: string[] = [];
 let expectedMessages;
 let page: Page;
@@ -23,10 +21,8 @@ games.forEach((game) => {
 
     test("Test sound toggle", async () => {
       const soundToggleGameWindow = page.frameLocator("#root iframe").locator("i").nth(2)
-      page.on("console", (msg) => {
-        consoleMessages.push(msg.text());
-      });
-      await launchGame(page, game);
+      startEventListener(page, consoleMessages);
+      await launchGame(page, game, consoleMessages);
       if (messageExists(consoleMessages, expectedMessages.soundCheckMessageToolBarOn)) {
         await soundToggleGameWindow.click();
         await validateConsoleMessages(
