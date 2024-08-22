@@ -1,30 +1,26 @@
 import { test, type Page } from "@playwright/test";
-import { launchGame, login, validateConsoleMessages, startEventListener, makeSpin } from "./utilities";
-import * as fs from "fs";
+import { launchGame, login, validateConsoleMessages, startEventListener, makeSpin, readGames } from "./utilities";
+import { ExpectedMessage } from "../types/expectedMessage";
 
-const consoleMessages: string[] = [];
-let expectedMessages;
-let page: Page;
-const games = JSON.parse(fs.readFileSync("games.json", "utf-8"));
-games.forEach((game) => {
-  test.describe(`Testing with text: ${game}`, () => {
-    test.beforeAll(async ({ browser }) => {
-      const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
-      expectedMessages = JSON.parse(data);
-      page = await browser.newPage();
-      await login(page);
-      
-    });
+let page: Page
+readGames().forEach((game) => {
+    const consoleMessages: string[] = [];
+     
+    test.describe(`Testing with text: ${game}`, () => {
+        test.beforeAll(async ({ browser }) => {
+            page = await browser.newPage();
+            await login(page);
+        });
 
-    test.afterAll(async () => {
-      await page.close();
-    });
+        test.afterAll(async () => {
+            await page.close();
+        });
 
-    test("gamePlay", async () => {
-      startEventListener(page, consoleMessages);
-      await launchGame(page, game, consoleMessages);
-      await makeSpin(page, expectedMessages.startSpin, consoleMessages);
-      await validateConsoleMessages(expectedMessages.endSpin, consoleMessages);
+        test("gamePlay", async () => {
+            startEventListener(page, consoleMessages);
+            await launchGame(page, game, consoleMessages);
+            await makeSpin(page, consoleMessages);
+            await validateConsoleMessages(ExpectedMessage.END_SPIN, consoleMessages);
+            });
     });
-  });
 });
