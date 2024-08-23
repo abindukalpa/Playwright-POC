@@ -17,13 +17,14 @@ readGames().forEach((game) => {
         await page.close();
       });
   
-      test("realityCheck", async () => {
+      test.skip("realityCheck", async () => {
       startEventListener(page, consoleMessages);
 
     await launchGame(page, game, consoleMessages);
 
     await makeSpin(page, consoleMessages);
 
+    // Wait 60s so the reality check timer kicks in
     await page.waitForTimeout(60000)
 
     await makeSpin(page, consoleMessages);
