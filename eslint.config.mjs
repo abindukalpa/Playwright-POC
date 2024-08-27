@@ -14,6 +14,7 @@ export default [
         rules: {
             'no-unused-vars': 'warn',
             'no-undef': 'warn',
+            'no-undefined': 'warn',
             'unused-imports/no-unused-imports': 'warn',
         },
     },
