@@ -1,16 +1,14 @@
 import { test, type Page } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login, startEventListener, makeDeposit } from "./utilities";
-import * as fs from "fs";
+import { launchGame, validateConsoleMessages, login, startEventListener, makeDeposit, readGames } from "./utilities";
+import { ExpectedMessage } from "../types/expectedMessage";
 
-const consoleMessages: string[] = [];
-let expectedMessages;
-let page: Page;
-const games = JSON.parse(fs.readFileSync("games.json", "utf-8"));
-games.forEach((game) => {
+
+
+readGames().forEach((game) => {
+  const consoleMessages: string[] = [];
+  let page: Page;
   test.describe(`Testing with text: ${game}`, () => {
     test.beforeAll(async ({ browser }) => {
-      const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
-      expectedMessages = JSON.parse(data);
       page = await browser.newPage();
       await login(page);
     });
@@ -33,7 +31,7 @@ games.forEach((game) => {
         .locator('.sprite')
         .click();
         await validateConsoleMessages(
-            expectedMessages.depositMessage,
+            ExpectedMessage.DEPOSIT,
             consoleMessages
         );
     });

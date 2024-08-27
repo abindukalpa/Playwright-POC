@@ -1,16 +1,13 @@
 import { test, type Page } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login, startEventListener, messageExists } from "./utilities";
-import * as fs from "fs";
+import { launchGame, validateConsoleMessages, login, startEventListener, messageExists, readGames } from "./utilities";
+import { ExpectedMessage } from "../types/expectedMessage";
 
-const consoleMessages: string[] = [];
-let expectedMessages;
-let page: Page;
-const games = JSON.parse(fs.readFileSync("games.json", "utf-8"));
-games.forEach((game) => {
+
+readGames().forEach((game) => {
+  const consoleMessages: string[] = [];
+  let page: Page;
   test.describe(`Testing with text: ${game}`, () => {
     test.beforeAll(async ({ browser }) => {
-      const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
-      expectedMessages = JSON.parse(data);
       page = await browser.newPage();
       await login(page);
     });
@@ -23,16 +20,16 @@ games.forEach((game) => {
       const soundToggleGameWindow = page.frameLocator("#root iframe").locator("i").nth(2)
       startEventListener(page, consoleMessages);
       await launchGame(page, game, consoleMessages);
-      if (messageExists(consoleMessages, expectedMessages.soundCheckMessageToolBarOn)) {
+      if (messageExists(consoleMessages, ExpectedMessage.SOUND_CHECK_TOOL_BAR_ON)) {
         await soundToggleGameWindow.click();
         await validateConsoleMessages(
-          expectedMessages.soundCheckMessageToolBarOff,
+          ExpectedMessage.SOUND_CHECK_TOOL_BAR_OFF,
           consoleMessages
         );
-      } else if (messageExists(consoleMessages, expectedMessages.soundCheckMessageToolBarOff)) {
+      } else if (messageExists(consoleMessages, ExpectedMessage.SOUND_CHECK_TOOL_BAR_OFF)) {
         await soundToggleGameWindow.click();
         await validateConsoleMessages(
-          expectedMessages.soundCheckMessageToolBarOn,
+          ExpectedMessage.SOUND_CHECK_TOOL_BAR_ON,
           consoleMessages
         );
       }
