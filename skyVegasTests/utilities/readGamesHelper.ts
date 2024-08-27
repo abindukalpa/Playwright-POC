@@ -1,3 +1,4 @@
-import * as fs from "fs";
+import * as fs from 'fs';
 
-export const readGames = () => JSON.parse(fs.readFileSync("games.json", "utf-8"));
+export const readGames = () =>
+    JSON.parse(fs.readFileSync('games.json', 'utf-8'));

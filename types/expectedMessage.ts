@@ -1,4 +1,4 @@
-export enum ExpectedMessage{
+export enum ExpectedMessage {
     BALANCE_UPDATE = 'balanceUpdate',
     CURRENCY_EUR = '"currency":"EUR"',
     CURRENCY_GBP = '"currency":"GBP"',
@@ -17,5 +17,5 @@ export enum ExpectedMessage{
     SOUND_CHECK_TOOL_BAR_OFF = '"sound":" false"',
     SOUND_CHECK_TOOL_BAR_ON = '"sound":" true"',
     STAKE_UPDATE = 'stakeUpdate',
-    START_SPIN = 'gameAnimationStart'
+    START_SPIN = 'gameAnimationStart',
 }
