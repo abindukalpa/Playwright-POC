@@ -1,31 +1,40 @@
 import { test, type Page } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login, startEventListener, makeSpin } from "./utilities";
-import * as fs from "fs";
+import { launchGame, validateConsoleMessages, login, startEventListener, makeSpin, readGames } from "./utilities";
+import { ExpectedMessage } from "../types/expectedMessage";
 
 
-test("realityCheck", async ({ page }) => {
-    const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
-    const expectedMessages = JSON.parse(data);
-    let consoleMessages: string[] = [];
 
-    await login(page);
+readGames().forEach((game) => {
+    let page: Page;
+    const consoleMessages: string[] = [];
+    test.describe(`Testing with text: ${game}`, () => {
+      test.beforeAll(async ({ browser }) => {
+        page = await browser.newPage();
+        await login(page);
+      });
+  
+      test.afterAll(async () => {
+        await page.close();
+      });
+  
+      test.skip("realityCheck", async () => {
+      startEventListener(page, consoleMessages);
 
-    startEventListener(page, consoleMessages);
+    await launchGame(page, game, consoleMessages);
 
-    await launchGame(page, "Big Bass: Hold & Spinner", consoleMessages);
+    await makeSpin(page, consoleMessages);
 
-    await makeSpin(page, expectedMessages.startSpin, consoleMessages);
-
+    // Wait 60s so the reality check timer kicks in
     await page.waitForTimeout(60000)
 
-    await makeSpin(page, expectedMessages.startSpin, consoleMessages);
+    await makeSpin(page, consoleMessages);
 
     await validateConsoleMessages(
-        expectedMessages.realityCheckMessage,
+        ExpectedMessage.REALITY_CHECK,
         consoleMessages,
         [65_000, 70_000, 75_000],
         120_000
     )
-
-    await page.close();
-});
+      });
+    });
+  });

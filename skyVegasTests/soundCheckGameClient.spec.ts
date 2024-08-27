@@ -5,18 +5,24 @@ import {
   login,
   startEventListener,
   messageExists,
+  readGames,
+} from "./utilities";
+import { ExpectedMessage } from "../types/expectedMessage";
+
+import {
+  launchGame,
+  validateConsoleMessages,
+  login,
+  startEventListener,
+  messageExists,
 } from "./utilities";
 import * as fs from "fs";
 
-const consoleMessages: string[] = [];
-let expectedMessages;
-let page: Page;
-const games = JSON.parse(fs.readFileSync("games.json", "utf-8"));
-games.forEach((game) => {
+readGames().forEach((game) => {
+  const consoleMessages: string[] = [];
+  let page: Page;
   test.describe(`Testing with text: ${game}`, () => {
     test.beforeAll(async ({ browser }) => {
-      const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
-      expectedMessages = JSON.parse(data);
       page = await browser.newPage();
       await login(page);
     });

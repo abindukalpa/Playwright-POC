@@ -1,16 +1,12 @@
 import { test, expect, type Page } from "@playwright/test";
-import { launchGame, validateConsoleMessages, login, startEventListener } from "./utilities";
-import * as fs from "fs";
+import { launchGame, validateConsoleMessages, login, startEventListener, readGames } from "./utilities";
+import { ExpectedMessage } from "../types/expectedMessage";
 
-const consoleMessages: string[] = [];
-let jsonObject;
-let page: Page;
-const games = JSON.parse(fs.readFileSync("games.json", "utf-8"));
-games.forEach((game) => {
+readGames().forEach((game) => {
+  const consoleMessages: string[] = [];
+  let page: Page;
   test.describe(`Testing with text: ${game}`, () => {
     test.beforeAll(async ({ browser }) => {
-      const data = fs.readFileSync("ExpectedSlotConsoleMessages.json", "utf-8");
-      jsonObject = JSON.parse(data);
       page = await browser.newPage();
       await login(page);
     });
@@ -18,7 +14,6 @@ games.forEach((game) => {
     test.afterAll(async () => {
       await page.close();
     });
-    // Iterate over the array and create a test for each value
 
     test("Test game menu open", async () => {
       startEventListener(page, consoleMessages);
@@ -33,7 +28,7 @@ games.forEach((game) => {
         .getByText("MenuOpen the menu to access")
         .click();
       await validateConsoleMessages(
-        jsonObject.gameHelpMenuOpen,
+        ExpectedMessage.GAME_HELP_MENU_OPEN,
         consoleMessages
       );
     });
@@ -48,7 +43,7 @@ games.forEach((game) => {
         .getByRole("link", { name: "Game Help" })
         .click();
       await validateConsoleMessages(
-        jsonObject.gameHelpMessage,
+        ExpectedMessage.GAME_HELP,
         consoleMessages
       );
     });
@@ -60,7 +55,7 @@ games.forEach((game) => {
         .click();
 
       await validateConsoleMessages(
-        jsonObject.gameHelpMenuClose,
+        ExpectedMessage.GAME_HELP_MENU_CLOSE,
         consoleMessages
       );
     });
@@ -75,7 +70,7 @@ games.forEach((game) => {
         .getByRole("link", { name: "Paytable" })
         .click();
       await validateConsoleMessages(
-        jsonObject.payTableMessage,
+        ExpectedMessage.PAY_TABLE,
         consoleMessages
       );
     });
