@@ -2,11 +2,10 @@ import { test, type Page } from "@playwright/test";
 import { launchGame, validateConsoleMessages, login, startEventListener, makeDeposit, readGames } from "./utilities";
 import { ExpectedMessage } from "../types/expectedMessage";
 
-
+let page: Page;
 
 readGames().forEach((game) => {
   const consoleMessages: string[] = [];
-  let page: Page;
   test.describe(`Testing with text: ${game}`, () => {
     test.beforeAll(async ({ browser }) => {
       page = await browser.newPage();
@@ -34,7 +33,7 @@ readGames().forEach((game) => {
             ExpectedMessage.ERROR_DISPLAYED,
             consoleMessages
         ); 
-        
+
         await validateConsoleMessages(
         ExpectedMessage.ERROR_DISMISSED,
         consoleMessages
