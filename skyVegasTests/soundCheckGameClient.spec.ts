@@ -9,15 +9,6 @@ import {
 } from "./utilities";
 import { ExpectedMessage } from "../types/expectedMessage";
 
-import {
-  launchGame,
-  validateConsoleMessages,
-  login,
-  startEventListener,
-  messageExists,
-} from "./utilities";
-import * as fs from "fs";
-
 readGames().forEach((game) => {
   const consoleMessages: string[] = [];
   let page: Page;
@@ -41,12 +32,12 @@ readGames().forEach((game) => {
       await soundToggleIcon.click();
       await soundToggleIcon.click();
       await validateConsoleMessages(
-        expectedMessages.soundCheckMessageGameOn,
+        ExpectedMessage.SOUND_CHECK_GAME_ON,
         consoleMessages
       );
       await soundToggleIcon.click();
       await validateConsoleMessages(
-        expectedMessages.soundCheckMessageGameOff,
+        ExpectedMessage.SOUND_CHECK_GAME_OFF,
         consoleMessages
       );
     });
