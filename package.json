@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "testlive": "NODE_ENV=live npx playwright test",
+        "start": "npx playwright test",
         "format": "prettier --write .",
         "prepare": "husky"
     },

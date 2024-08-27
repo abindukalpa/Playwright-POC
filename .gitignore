@@ -4,8 +4,7 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 .DS_Store
-.env.live
-.env.nxt
+.env*
 *.png
 .npm_installed
 .image_built
