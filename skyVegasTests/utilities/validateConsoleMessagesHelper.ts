@@ -4,19 +4,11 @@ import { messageExists } from "../utilities";
 export const validateConsoleMessages = async (
   expectedMessage: string,
   consoleMessages: string[],
-  intervals?: number[],
-  timeout?: number
+  intervals: number[] = [5_000, 10_000, 15_000],
+  timeout: number = 60_000
 ) => {
-  if (expectedMessage === undefined){
-    throw new Error("expected message is null")
-  }
-
-  if (intervals === undefined) {
-    intervals =  [5_000, 10_000, 15_000]
-  }
-
-  if (timeout === undefined) {
-    timeout =  60_000
+  if (expectedMessage === undefined) {
+    throw new Error("expected message is null");
   }
 
   await expect(async () => {
@@ -25,5 +17,4 @@ export const validateConsoleMessages = async (
     intervals: intervals,
     timeout: timeout,
   });
-  
 };
