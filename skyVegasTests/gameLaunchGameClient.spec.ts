@@ -1,17 +1,27 @@
-import { test } from '@playwright/test';
-import { launchGame, validateConsoleMessages, login } from './utilities';
-import * as fs from 'fs';
+import { test, type Page } from "@playwright/test";
+import { launchGame, validateConsoleMessages, login, startEventListener, readGames } from "./utilities";
+import { ExpectedMessage } from "../types/expectedMessage";
 
-test('gameLaunch', async ({ page }) => {
-    const data = fs.readFileSync('ExpectedSlotConsoleMessages.json', 'utf-8');
-    const jsonObject = JSON.parse(data);
-    const consoleMessages: string[] = [];
-    await login(page);
-    page.on('console', (msg) => {
-        consoleMessages.push(msg.text());
+readGames().forEach((game) => {
+  const consoleMessages: string[] = [];
+  let page: Page;
+  test.describe(`Testing with text: ${game}`, () => {
+    test.beforeAll(async ({ browser }) => {
+      page = await browser.newPage();
+      await login(page);
     });
 
-    await launchGame(page, 'Big Bass Splash');
+    test.afterAll(async () => {
+      await page.close();
+    });
 
-    await validateConsoleMessages(jsonObject.loadingMessage, consoleMessages);
+    test("gameLaunch", async () => {
+        startEventListener(page, consoleMessages);
+        await launchGame(page, game, consoleMessages);
+        await validateConsoleMessages(
+          ExpectedMessage.GAME_LOAD_COMPLETE,
+          consoleMessages
+        );
+    })
+  });
 });

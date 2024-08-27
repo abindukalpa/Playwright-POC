@@ -1,61 +1,38 @@
-import { test, type Page } from '@playwright/test';
-import { launchGame, validateConsoleMessages, login } from './utilities';
-import * as fs from 'fs';
-import { messageExists } from './utilities/validateConsoleMessagesHelper';
+import { test, type Page } from "@playwright/test";
+import { launchGame, validateConsoleMessages, login, startEventListener, messageExists, readGames } from "./utilities";
+import { ExpectedMessage } from "../types/expectedMessage";
 
-test.describe.configure({ mode: 'serial' });
-const consoleMessages: string[] = [];
-let expectedMessages;
-let page: Page;
-const games = JSON.parse(fs.readFileSync('games.json', 'utf-8'));
-games.forEach((game) => {
-    test.describe(`Testing with text: ${game}`, () => {
-        test.beforeAll(async ({ browser }) => {
-            const data = fs.readFileSync(
-                'ExpectedSlotConsoleMessages.json',
-                'utf-8'
-            );
-            expectedMessages = JSON.parse(data);
-            page = await browser.newPage();
-            await login(page);
-        });
+
+readGames().forEach((game) => {
+  const consoleMessages: string[] = [];
+  let page: Page;
+  test.describe(`Testing with text: ${game}`, () => {
+    test.beforeAll(async ({ browser }) => {
+      page = await browser.newPage();
+      await login(page);
+    });
 
         test.afterAll(async () => {
             await page.close();
         });
 
-        test('Test sound toggle', async () => {
-            const soundToggleGameWindow = page
-                .frameLocator('#root iframe')
-                .locator('i')
-                .nth(2);
-            page.on('console', (msg) => {
-                consoleMessages.push(msg.text());
-            });
-            await launchGame(page, game);
-            if (
-                messageExists(
-                    consoleMessages,
-                    expectedMessages.soundCheckMessageToolBarOn
-                )
-            ) {
-                await soundToggleGameWindow.click();
-                await validateConsoleMessages(
-                    expectedMessages.soundCheckMessageToolBarOff,
-                    consoleMessages
-                );
-            } else if (
-                messageExists(
-                    consoleMessages,
-                    expectedMessages.soundCheckMessageToolBarOff
-                )
-            ) {
-                await soundToggleGameWindow.click();
-                await validateConsoleMessages(
-                    expectedMessages.soundCheckMessageToolBarOn,
-                    consoleMessages
-                );
-            }
-        });
+    test("Test sound toggle", async () => {
+      const soundToggleGameWindow = page.frameLocator("#root iframe").locator("i").nth(2)
+      startEventListener(page, consoleMessages);
+      await launchGame(page, game, consoleMessages);
+      if (messageExists(consoleMessages, ExpectedMessage.SOUND_CHECK_TOOL_BAR_ON)) {
+        await soundToggleGameWindow.click();
+        await validateConsoleMessages(
+          ExpectedMessage.SOUND_CHECK_TOOL_BAR_OFF,
+          consoleMessages
+        );
+      } else if (messageExists(consoleMessages, ExpectedMessage.SOUND_CHECK_TOOL_BAR_OFF)) {
+        await soundToggleGameWindow.click();
+        await validateConsoleMessages(
+          ExpectedMessage.SOUND_CHECK_TOOL_BAR_ON,
+          consoleMessages
+        );
+      }
     });
+  });
 });

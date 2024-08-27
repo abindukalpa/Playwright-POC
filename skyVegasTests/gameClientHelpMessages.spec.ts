@@ -1,64 +1,52 @@
-import { test, expect, type Page } from '@playwright/test';
-import { launchGame, validateConsoleMessages, login } from './utilities';
-import * as fs from 'fs';
+import { test, expect, type Page } from "@playwright/test";
+import { launchGame, validateConsoleMessages, login, startEventListener, readGames } from "./utilities";
+import { ExpectedMessage } from "../types/expectedMessage";
 
-test.describe.configure({ mode: 'serial' });
-const consoleMessages: string[] = [];
-let jsonObject;
-let page: Page;
-const textValues = JSON.parse(fs.readFileSync('games.json', 'utf-8'));
-textValues.forEach((textValue) => {
-    /* eslint-disable no-empty-pattern */
-    test.describe(`Testing with text: ${textValue}`, () => {
-        test.beforeAll(async ({ browser }) => {
-            const data = fs.readFileSync(
-                'ExpectedSlotConsoleMessages.json',
-                'utf-8'
-            );
-            jsonObject = JSON.parse(data);
-            page = await browser.newPage();
-            await login(page);
-        });
+readGames().forEach((game) => {
+  const consoleMessages: string[] = [];
+  let page: Page;
+  test.describe(`Testing with text: ${game}`, () => {
+    test.beforeAll(async ({ browser }) => {
+      page = await browser.newPage();
+      await login(page);
+    });
 
-        test.afterAll(async () => {
-            await page.close();
-        });
-        // Iterate over the array and create a test for each value
+    test.afterAll(async () => {
+      await page.close();
+    });
 
-        test('Test game menu open', async () => {
-            page.on('console', (msg) => {
-                consoleMessages.push(msg.text());
-            });
-            await launchGame(page, textValue);
-            await expect(
-                page
-                    .frameLocator('#root iframe')
-                    .getByText('MenuOpen the menu to access')
-            ).toBeAttached();
-            await page
-                .frameLocator('#root iframe')
-                .getByText('MenuOpen the menu to access')
-                .click();
-            await validateConsoleMessages(
-                jsonObject.gameHelpMenuOpen,
-                consoleMessages
-            );
-        });
+    test("Test game menu open", async () => {
+      startEventListener(page, consoleMessages);
+      await launchGame(page, game, consoleMessages);
+      await expect(
+        page
+          .frameLocator("#root iframe")
+          .getByText("MenuOpen the menu to access")
+      ).toBeAttached();
+      await page
+        .frameLocator("#root iframe")
+        .getByText("MenuOpen the menu to access")
+        .click();
+      await validateConsoleMessages(
+        ExpectedMessage.GAME_HELP_MENU_OPEN,
+        consoleMessages
+      );
+    });
 
-        test('Test help menu open', async () => {
-            await page
-                .frameLocator('#root iframe')
-                .getByRole('link', { name: 'Game Help' })
-                .waitFor();
-            await page
-                .frameLocator('#root iframe')
-                .getByRole('link', { name: 'Game Help' })
-                .click();
-            await validateConsoleMessages(
-                jsonObject.gameHelpMessage,
-                consoleMessages
-            );
-        });
+    test("Test help menu open", async () => {
+      await page
+        .frameLocator("#root iframe")
+        .getByRole("link", { name: "Game Help" })
+        .waitFor();
+      await page
+        .frameLocator("#root iframe")
+        .getByRole("link", { name: "Game Help" })
+        .click();
+      await validateConsoleMessages(
+        ExpectedMessage.GAME_HELP,
+        consoleMessages
+      );
+    });
 
         test('Test game menu closed', async () => {
             await page
@@ -66,26 +54,26 @@ textValues.forEach((textValue) => {
                 .getByText('MenuOpen the menu to access')
                 .click();
 
-            await validateConsoleMessages(
-                jsonObject.gameHelpMenuClose,
-                consoleMessages
-            );
-        });
-
-        test('Test paytable open', async () => {
-            await page
-                .frameLocator('#root iframe')
-                .getByRole('link', { name: 'Game Help' })
-                .waitFor();
-            await page
-                .frameLocator('#root iframe')
-                .getByRole('link', { name: 'Paytable' })
-                .click();
-            await validateConsoleMessages(
-                jsonObject.payTableMessage,
-                consoleMessages
-            );
-        });
+      await validateConsoleMessages(
+        ExpectedMessage.GAME_HELP_MENU_CLOSE,
+        consoleMessages
+      );
     });
+
+    test("Test paytable open", async () => {
+      await page
+        .frameLocator("#root iframe")
+        .getByRole("link", { name: "Game Help" })
+        .waitFor();
+      await page
+        .frameLocator("#root iframe")
+        .getByRole("link", { name: "Paytable" })
+        .click();
+      await validateConsoleMessages(
+        ExpectedMessage.PAY_TABLE,
+        consoleMessages
+      );
+    });
+  });
 });
 /* eslint-enable no-empty-pattern */

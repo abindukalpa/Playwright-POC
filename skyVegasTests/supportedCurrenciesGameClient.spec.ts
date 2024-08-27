@@ -1,19 +1,25 @@
-import { test } from '@playwright/test';
-import { launchGame, validateConsoleMessages, login } from './utilities';
-import * as fs from 'fs';
+import { test, type Page } from "@playwright/test";
+import { launchGame, validateConsoleMessages, login, startEventListener, readGames } from "./utilities";
+import { ExpectedMessage } from "../types/expectedMessage";
 
-test('supportedCurrencies', async ({ page }) => {
-    const data = fs.readFileSync('ExpectedSlotConsoleMessages.json', 'utf-8');
-    const jsonObject = JSON.parse(data);
+let page: Page;
+  readGames().forEach((game) => {
     const consoleMessages: string[] = [];
-    await login(page);
-    page.on('console', (msg) => {
-        consoleMessages.push(msg.text());
+    
+    test.describe(`Testing with text: ${game}`, () => {
+      test.beforeAll(async ({ browser }) => {
+        page = await browser.newPage();
+        await login(page);
+      });
+  
+      test.afterAll(async () => {
+        await page.close();
+      });
+  
+      test("supportedCurrencies", async () => {
+          startEventListener(page, consoleMessages);
+          await launchGame(page, game, consoleMessages);
+          await validateConsoleMessages(ExpectedMessage.CURRENCY_GBP, consoleMessages);
+      })
     });
-    await launchGame(page, 'Big Bass Splash');
-
-    await validateConsoleMessages(
-        jsonObject.currencyMessageGbp,
-        consoleMessages
-    );
-});
+  });
