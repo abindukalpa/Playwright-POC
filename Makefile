@@ -39,7 +39,7 @@ $(IMAGE_STAMP): Dockerfile
 	touch $(IMAGE_STAMP)
 
 image-run: image-build
-	docker run playwright-poc
+	docker run -e "NODE_ENV=$(ENV)" playwright-poc
 
 image-rebuild: clean image-build
 
