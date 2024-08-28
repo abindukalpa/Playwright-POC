@@ -1,57 +1,61 @@
-import { test, type Page, expect } from "@playwright/test";
+import { test, type Page, expect } from '@playwright/test';
 import {
-  launchGame,
-  validateConsoleMessages,
-  login,
-  startEventListener,
-  messageExists,
-  readGames,
-} from "./utilities";
-import { ExpectedMessage } from "../types/expectedMessage";
+    launchGame,
+    validateConsoleMessages,
+    login,
+    startEventListener,
+    messageExists,
+    readGames,
+} from './utilities';
+import { ExpectedMessage } from '../types/expectedMessage';
 
 readGames().forEach((game) => {
-  const consoleMessages: string[] = [];
-  let page: Page;
-  let classAttribute: string;
-  test.describe(`Testing with text: ${game}`, () => {
-    test.beforeAll(async ({ browser }) => {
-      page = await browser.newPage();
-      await login(page);
-    });
+    const consoleMessages: string[] = [];
+    let page: Page;
+    const ICON_MUTED_CLASS = 'icon icon-volume';
+    const ICON_VOLUME_CLASS = 'icon icon-volume muted';
+
+    test.describe(`Testing with text: ${game}`, () => {
+        test.beforeAll(async ({ browser }) => {
+            page = await browser.newPage();
+            await login(page);
+        });
 
         test.afterAll(async () => {
             await page.close();
         });
 
-    test("Test sound toggle", async () => {
-      startEventListener(page, consoleMessages);
-      await launchGame(page, game, consoleMessages);
-      const soundToggleIcon = page
-        .frameLocator("#root iframe")
-        .locator("i")
-        .nth(2);
+        test('Test sound toggle', async () => {
+            startEventListener(page, consoleMessages);
+            await launchGame(page, game, consoleMessages);
+            const soundToggleIcon = page
+                .frameLocator('#root iframe')
+                .locator('i')
+                .nth(2);
 
-      classAttribute = (await soundToggleIcon.getAttribute("class")) as string;
-      if (classAttribute == "icon icon-volume") {
-        //If sound is on, turn it off
-        await soundToggleIcon.click();
-      }
-      await soundToggleIcon.click();
-      expect(await soundToggleIcon.getAttribute("class")).toEqual(
-        "icon icon-volume"
-      );
-      await validateConsoleMessages(
-        ExpectedMessage.SOUND_CHECK_GAME_ON,
-        consoleMessages
-      );
-      await soundToggleIcon.click();
-      expect(await soundToggleIcon.getAttribute("class")).toEqual(
-        "icon icon-volume muted"
-      );
-      await validateConsoleMessages(
-        ExpectedMessage.SOUND_CHECK_GAME_OFF,
-        consoleMessages
-      );
+            if (
+                (await soundToggleIcon.getAttribute('class')) ==
+                ICON_VOLUME_CLASS
+            ) {
+                //If sound is on, turn it off
+                await soundToggleIcon.click();
+            }
+            await soundToggleIcon.click();
+            expect(await soundToggleIcon.getAttribute('class')).toEqual(
+                ICON_VOLUME_CLASS
+            );
+            await validateConsoleMessages(
+                ExpectedMessage.SOUND_CHECK_GAME_ON,
+                consoleMessages
+            );
+            await soundToggleIcon.click();
+            expect(await soundToggleIcon.getAttribute('class')).toEqual(
+                ICON_MUTED_CLASS
+            );
+            await validateConsoleMessages(
+                ExpectedMessage.SOUND_CHECK_GAME_OFF,
+                consoleMessages
+            );
+        });
     });
-  });
 });
