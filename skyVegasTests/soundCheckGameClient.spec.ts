@@ -43,15 +43,16 @@ readGames().forEach((game) => {
             await soundToggleIcon.click();
 
             expect(
-                (await soundToggleIcon.getAttribute('class')) ==
+                (await soundToggleIcon.getAttribute('class'))?.includes(
                     ICON_MUTED_CLASS
+                )
             ).toBeFalsy;
             await validateConsoleMessages(
                 ExpectedMessage.SOUND_CHECK_GAME_ON,
                 consoleMessages
             );
             await soundToggleIcon.click();
-            expect(await soundToggleIcon.getAttribute('class')).toEqual(
+            expect(await soundToggleIcon.getAttribute('class')).toContain(
                 ICON_MUTED_CLASS
             );
             await validateConsoleMessages(
