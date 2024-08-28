@@ -19,9 +19,9 @@ readGames().forEach((game) => {
       await login(page);
     });
 
-    test.afterAll(async () => {
-      await page.close();
-    });
+        test.afterAll(async () => {
+            await page.close();
+        });
 
     test("Test sound toggle", async () => {
       startEventListener(page, consoleMessages);

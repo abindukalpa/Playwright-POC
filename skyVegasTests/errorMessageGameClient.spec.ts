@@ -2,11 +2,10 @@ import { test, type Page } from "@playwright/test";
 import { launchGame, validateConsoleMessages, login, startEventListener, makeDeposit, readGames } from "./utilities";
 import { ExpectedMessage } from "../types/expectedMessage";
 
-
+let page: Page;
 
 readGames().forEach((game) => {
   const consoleMessages: string[] = [];
-  let page: Page;
   test.describe(`Testing with text: ${game}`, () => {
     test.beforeAll(async ({ browser }) => {
       page = await browser.newPage();
@@ -17,7 +16,7 @@ readGames().forEach((game) => {
       await page.close();
     });
 
-    test("Test deposit flow", async ({browser}) => {
+    test("error message", async ({browser}) => {
         startEventListener(page, consoleMessages);
         await launchGame(page, game, consoleMessages);
         await page
@@ -31,8 +30,13 @@ readGames().forEach((game) => {
         .locator('.sprite')
         .click();
         await validateConsoleMessages(
-            ExpectedMessage.DEPOSIT,
+            ExpectedMessage.ERROR_DISPLAYED,
             consoleMessages
+        ); 
+
+        await validateConsoleMessages(
+        ExpectedMessage.ERROR_DISMISSED,
+        consoleMessages
         );
     });
   });

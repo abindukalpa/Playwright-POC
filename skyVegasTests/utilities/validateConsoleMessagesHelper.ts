@@ -1,5 +1,5 @@
-import { expect } from "@playwright/test";
-import { messageExists } from "../utilities";
+import { expect } from '@playwright/test';
+import { messageExists } from '../utilities';
 
 export const validateConsoleMessages = async (
   expectedMessage: string,
@@ -7,14 +7,22 @@ export const validateConsoleMessages = async (
   intervals: number[] = [5_000, 10_000, 15_000],
   timeout: number = 60_000
 ) => {
-  if (expectedMessage === undefined) {
-    throw new Error("expected message is null");
-  }
+    if (expectedMessage === undefined) {
+        throw new Error('expected message is null');
+    }
 
-  await expect(async () => {
-    expect(messageExists(consoleMessages, expectedMessage)).toBe(true);
-  }).toPass({
-    intervals: intervals,
-    timeout: timeout,
-  });
+    if (intervals === undefined) {
+        intervals = [5_000, 10_000, 15_000];
+    }
+
+    if (timeout === undefined) {
+        timeout = 60_000;
+    }
+
+    await expect(async () => {
+        expect(messageExists(consoleMessages, expectedMessage)).toBe(true);
+    }).toPass({
+        intervals: intervals,
+        timeout: timeout,
+    });
 };
