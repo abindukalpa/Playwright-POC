@@ -23,7 +23,6 @@ install: $(INSTALL_STAMP)
 
 $(INSTALL_STAMP): package.json package-lock.json
 	npm install
-	npx husky install
 	touch $(INSTALL_STAMP)
 
 lint:
