@@ -12,7 +12,7 @@ import { ExpectedMessage } from '../types/expectedMessage';
 readGames().forEach((game) => {
     const consoleMessages: string[] = [];
     let page: Page;
-    const ICON_MUTED_CLASS = 'icon icon-volume muted';
+    const ICON_MUTED_CLASS = 'muted';
 
     test.describe(`Testing with text: ${game}`, () => {
         test.beforeAll(async ({ browser }) => {
