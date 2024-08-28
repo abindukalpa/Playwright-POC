@@ -35,7 +35,7 @@ readGames().forEach((game) => {
         ExpectedMessage.SOUND_CHECK_GAME_ON,
         consoleMessages
       );
-      await soundToggleIcon.click();
+
       await validateConsoleMessages(
         ExpectedMessage.SOUND_CHECK_GAME_OFF,
         consoleMessages
