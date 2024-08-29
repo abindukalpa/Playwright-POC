@@ -6,6 +6,7 @@ export const launchGame = async (
     gameName,
     consoleMessages: string[]
 ) => {
+    await new Promise((r) => setTimeout(r, 2000));
     await page.getByText('Search for games...').click();
     await new Promise((r) => setTimeout(r, 2000));
     await page.getByPlaceholder('Search for games...').fill(gameName);
