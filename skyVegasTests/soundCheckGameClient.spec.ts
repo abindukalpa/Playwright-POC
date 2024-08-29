@@ -4,7 +4,6 @@ import {
     validateConsoleMessages,
     login,
     startEventListener,
-    messageExists,
     readGames,
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
