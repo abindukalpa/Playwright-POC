@@ -1,4 +1,4 @@
 export const messageExists = (
     consoleMessages: string[],
     expectedMessage: string
-): boolean => consoleMessages.some((msg) => msg.includes(expectedMessage));
+): number => consoleMessages.findIndex((msg) => msg.includes(expectedMessage));

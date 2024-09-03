@@ -4,14 +4,24 @@ import { messageExists } from '../utilities';
 export const validateConsoleMessages = async (
     expectedMessage: string,
     consoleMessages: string[],
-    intervals: number[] = [...Array(60).map(_ => (_+1) * 1000)],
+    deleteMessages: boolean = false,
+    intervals: number[] = [5_000, 10_000, 15_000],
     timeout = 60_000
 ) => {
-    await expect(async () => {
-        console.log(consoleMessages.length)
-        expect(messageExists(consoleMessages, expectedMessage)).toBe(true);
+    await expect(async (): Promise<void> => {
+        const index = messageExists(consoleMessages, expectedMessage)
+        const isValidated = index !== -1
+        if (isValidated && deleteMessages) {
+            // clear console messages
+            deletePreviousConsoleMessages(consoleMessages, index)
+        }
+        expect(isValidated).toBeTruthy();
     }).toPass({
         intervals: intervals,
         timeout: timeout,
     });
 };
+
+export const deletePreviousConsoleMessages = (consoleMessages: string[], index: number): void => {
+    consoleMessages.splice(0, index + 1);
+}

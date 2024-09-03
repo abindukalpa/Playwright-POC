@@ -1,5 +1,6 @@
-import { expect, type Page } from '@playwright/test';
+import { type Page } from '@playwright/test';
 import { validateConsoleMessages } from './validateConsoleMessagesHelper';
+import { ExpectedMessage } from '../../types/expectedMessage';
 
 export const launchGame = async (
     page: Page,
@@ -12,8 +13,9 @@ export const launchGame = async (
     await new Promise((r) => setTimeout(r, 2000));
     await page.locator('.tile-footer-wrapper').first().click();
     await validateConsoleMessages(
-        'gameLoadComplete',
+        ExpectedMessage.GAME_LOAD_COMPLETE,
         consoleMessages,
+        true,
         [4_000, 6_000, 8_000, 15_000]
     );
 };

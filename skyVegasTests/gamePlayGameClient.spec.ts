@@ -4,11 +4,12 @@ import {
     login,
     validateConsoleMessages,
     startEventListener,
-    makeSpin,
+    firstSpin,
     readGames,
     getBalanceFromConsoleMessages,
     getStakeAmountFromConsoleMessages,
-    getWinAmountFromConsoleMessages
+    getWinAmountFromConsoleMessages,
+    spin,
 } from './utilities';
 
 // TODO:
@@ -19,7 +20,6 @@ import {
 
 let page: Page;
 readGames().forEach((game) => {
-
     test.describe(`Testing with text: ${game}`, () => {
         test.beforeAll(async ({ browser }) => {
             page = await browser.newPage();
@@ -35,32 +35,32 @@ readGames().forEach((game) => {
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
 
-            const startBalance = getBalanceFromConsoleMessages(consoleMessages);
+            const startBalance = await getBalanceFromConsoleMessages(consoleMessages);
             const stakeAmount =
-                getStakeAmountFromConsoleMessages(consoleMessages);
+                await getStakeAmountFromConsoleMessages(consoleMessages);
 
             let totalStakeAmount = stakeAmount;
 
             console.log(startBalance);
             console.log(totalStakeAmount);
 
-            await makeSpin(page, consoleMessages);
+            await firstSpin(page, consoleMessages);
 
             let reversedConsoleMessages = consoleMessages.slice().reverse();
 
-            let winAmount = getWinAmountFromConsoleMessages(
+            let winAmount = await getWinAmountFromConsoleMessages(
                 reversedConsoleMessages
             );
 
             while (winAmount > 0) {
                 consoleMessages.length = 0;
-                await makeSpin(page, consoleMessages);
+                await spin(page, consoleMessages);
                 reversedConsoleMessages = consoleMessages.slice().reverse();
 
                 validateConsoleMessages('balanceUpdate', consoleMessages);
                 validateConsoleMessages('winUpdate', consoleMessages);
 
-                winAmount = getWinAmountFromConsoleMessages(
+                winAmount = await getWinAmountFromConsoleMessages(
                     reversedConsoleMessages
                 );
                 console.log('winAmount inside loop: ' + winAmount);
@@ -93,44 +93,43 @@ readGames().forEach((game) => {
 
             await launchGame(page, game, consoleMessages);
 
-            const startBalance = getBalanceFromConsoleMessages(consoleMessages);
+            const startBalance = await getBalanceFromConsoleMessages(consoleMessages);
             const stakeAmount =
-                getStakeAmountFromConsoleMessages(consoleMessages);
+                await getStakeAmountFromConsoleMessages(consoleMessages);
             let totalStakeAmount = stakeAmount;
-            console.log(startBalance);
-            console.log(totalStakeAmount);
+            console.log("startBalance: " + startBalance);
+            console.log("totalStakeAmount at the start: " + totalStakeAmount);
 
-            await makeSpin(page, consoleMessages);
+            await firstSpin(page, consoleMessages);
 
-            let reversedConsoleMessages = consoleMessages.slice().reverse();
-
-            let winAmount = getWinAmountFromConsoleMessages(
-                reversedConsoleMessages
+            let winAmount = await getWinAmountFromConsoleMessages(
+                consoleMessages
             );
 
             while (winAmount == 0) {
-                consoleMessages.length = 0;
-                await makeSpin(page, consoleMessages);
-                //doesn't work past here
-                reversedConsoleMessages = consoleMessages.slice().reverse();
+                await spin(page, consoleMessages);
 
-                winAmount = getWinAmountFromConsoleMessages(
-                    reversedConsoleMessages
+                winAmount = await getWinAmountFromConsoleMessages(
+                    consoleMessages
                 );
+
                 console.log('winAmount inside loop: ' + winAmount);
 
                 totalStakeAmount += stakeAmount;
+
                 console.log(
                     'totalStakeAmount inside loop: ' + totalStakeAmount
                 );
+
                 console.log(consoleMessages);
             }
 
-            const consoleEndBalance = getBalanceFromConsoleMessages(
-                reversedConsoleMessages
+            const consoleEndBalance = await getBalanceFromConsoleMessages(
+                consoleMessages
             );
+
             const endBalanceCalculated =
-                startBalance - totalStakeAmount + winAmount;
+                Number((startBalance - totalStakeAmount + winAmount).toFixed(2));
 
             console.log('startBalance: ' + startBalance);
             console.log('stakeAmount: ' + totalStakeAmount);

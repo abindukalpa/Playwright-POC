@@ -4,7 +4,8 @@ import {
     validateConsoleMessages,
     login,
     startEventListener,
-    makeSpin,
+    firstSpin,
+    spin,
     readGames,
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
@@ -27,16 +28,17 @@ readGames().forEach((game) => {
 
             await launchGame(page, game, consoleMessages);
 
-            await makeSpin(page, consoleMessages);
+            await firstSpin(page, consoleMessages);
 
             // Wait 60s so the reality check timer kicks in
             await page.waitForTimeout(60000);
 
-            await makeSpin(page, consoleMessages);
+            await spin(page, consoleMessages);
 
             await validateConsoleMessages(
                 ExpectedMessage.REALITY_CHECK,
                 consoleMessages,
+                true,
                 [65_000, 70_000, 75_000],
                 120_000
             );
