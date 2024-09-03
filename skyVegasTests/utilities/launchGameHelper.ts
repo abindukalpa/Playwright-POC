@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { validateConsoleMessages } from './validateConsoleMessagesHelper';
 
 export const launchGame = async (
