@@ -2,7 +2,6 @@ import { test, type Page, expect } from '@playwright/test';
 import {
     launchGame,
     login,
-    validateConsoleMessages,
     startEventListener,
     firstSpin,
     readGames,
@@ -21,67 +20,65 @@ import {
 let page: Page;
 readGames().forEach((game) => {
     test.describe(`Testing with text: ${game}`, () => {
-        test.beforeAll(async ({ browser }) => {
+        test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
             await login(page);
         });
 
-        test.afterAll(async () => {
+        test.afterEach(async () => {
             await page.close();
         });
 
-        test.skip('gamePlayForLoss', async () => {
+        test('gamePlayForLoss', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
+
             await launchGame(page, game, consoleMessages);
 
-            const startBalance = await getBalanceFromConsoleMessages(consoleMessages);
+            const startBalance =
+                await getBalanceFromConsoleMessages(consoleMessages);
             const stakeAmount =
                 await getStakeAmountFromConsoleMessages(consoleMessages);
-
             let totalStakeAmount = stakeAmount;
-
-            console.log(startBalance);
-            console.log(totalStakeAmount);
+            console.log('startBalance: ' + startBalance);
+            console.log('totalStakeAmount at the start: ' + totalStakeAmount);
 
             await firstSpin(page, consoleMessages);
 
-            let reversedConsoleMessages = consoleMessages.slice().reverse();
-
-            let winAmount = await getWinAmountFromConsoleMessages(
-                reversedConsoleMessages
-            );
+            let totalWinAmount = 0;
+            let winAmount =
+                await getWinAmountFromConsoleMessages(consoleMessages);
+            totalWinAmount += winAmount;
 
             while (winAmount > 0) {
-                consoleMessages.length = 0;
                 await spin(page, consoleMessages);
-                reversedConsoleMessages = consoleMessages.slice().reverse();
 
-                validateConsoleMessages('balanceUpdate', consoleMessages);
-                validateConsoleMessages('winUpdate', consoleMessages);
+                winAmount =
+                    await getWinAmountFromConsoleMessages(consoleMessages);
+                totalWinAmount += winAmount;
 
-                winAmount = await getWinAmountFromConsoleMessages(
-                    reversedConsoleMessages
-                );
                 console.log('winAmount inside loop: ' + winAmount);
 
                 totalStakeAmount += stakeAmount;
+
                 console.log(
                     'totalStakeAmount inside loop: ' + totalStakeAmount
                 );
+
                 console.log(consoleMessages);
             }
 
-            const consoleEndBalance = getBalanceFromConsoleMessages(
-                reversedConsoleMessages
+            const consoleEndBalance =
+                await getBalanceFromConsoleMessages(consoleMessages);
+
+            const endBalanceCalculated = Number(
+                (startBalance - totalStakeAmount + totalWinAmount).toFixed(2)
             );
-            const endBalanceCalculated =
-                startBalance - totalStakeAmount + winAmount;
 
             console.log('startBalance: ' + startBalance);
             console.log('stakeAmount: ' + totalStakeAmount);
             console.log('consoleEndBalance: ' + consoleEndBalance);
-            console.log('winAmount: ' + winAmount);
+            console.log('winAmount: ' + totalWinAmount);
             console.log('endBalanceCalculated: ' + endBalanceCalculated);
 
             expect(endBalanceCalculated).toEqual(consoleEndBalance);
@@ -93,25 +90,24 @@ readGames().forEach((game) => {
 
             await launchGame(page, game, consoleMessages);
 
-            const startBalance = await getBalanceFromConsoleMessages(consoleMessages);
+            const startBalance =
+                await getBalanceFromConsoleMessages(consoleMessages);
             const stakeAmount =
                 await getStakeAmountFromConsoleMessages(consoleMessages);
             let totalStakeAmount = stakeAmount;
-            console.log("startBalance: " + startBalance);
-            console.log("totalStakeAmount at the start: " + totalStakeAmount);
+            console.log('startBalance: ' + startBalance);
+            console.log('totalStakeAmount at the start: ' + totalStakeAmount);
 
             await firstSpin(page, consoleMessages);
 
-            let winAmount = await getWinAmountFromConsoleMessages(
-                consoleMessages
-            );
+            let winAmount =
+                await getWinAmountFromConsoleMessages(consoleMessages);
 
             while (winAmount == 0) {
                 await spin(page, consoleMessages);
 
-                winAmount = await getWinAmountFromConsoleMessages(
-                    consoleMessages
-                );
+                winAmount =
+                    await getWinAmountFromConsoleMessages(consoleMessages);
 
                 console.log('winAmount inside loop: ' + winAmount);
 
@@ -124,12 +120,12 @@ readGames().forEach((game) => {
                 console.log(consoleMessages);
             }
 
-            const consoleEndBalance = await getBalanceFromConsoleMessages(
-                consoleMessages
-            );
+            const consoleEndBalance =
+                await getBalanceFromConsoleMessages(consoleMessages);
 
-            const endBalanceCalculated =
-                Number((startBalance - totalStakeAmount + winAmount).toFixed(2));
+            const endBalanceCalculated = Number(
+                (startBalance - totalStakeAmount + winAmount).toFixed(2)
+            );
 
             console.log('startBalance: ' + startBalance);
             console.log('stakeAmount: ' + totalStakeAmount);

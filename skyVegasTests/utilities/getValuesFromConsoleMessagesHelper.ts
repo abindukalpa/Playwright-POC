@@ -1,5 +1,8 @@
 import { messageExists } from './messageExistsHelper';
-import { deletePreviousConsoleMessages, validateConsoleMessages } from './validateConsoleMessagesHelper';
+import {
+    deletePreviousConsoleMessages,
+    validateConsoleMessages,
+} from './validateConsoleMessagesHelper';
 
 export const getBalanceFromConsoleMessages = async (
     consoleMessages: string[]
@@ -11,12 +14,14 @@ export const getBalanceFromConsoleMessages = async (
 
     if (realAmountMessage) {
         // delete realAmountMessage messages here
-        deletePreviousConsoleMessages(consoleMessages, messageExists(consoleMessages, 'balanceUpdate'))
+        deletePreviousConsoleMessages(
+            consoleMessages,
+            messageExists(consoleMessages, 'balanceUpdate')
+        );
         const realAmount: RegExpMatchArray | null = realAmountMessage.match(
             /"realAmount":(\d+(\.\d+)?)/
         );
         if (realAmount) {
-           
             return Number(parseFloat(realAmount[1]).toFixed(2));
         }
     }
@@ -33,7 +38,10 @@ export const getStakeAmountFromConsoleMessages = async (
     );
 
     if (stakeUpdateMessage) {
-        deletePreviousConsoleMessages(consoleMessages, messageExists(consoleMessages, 'stakeAmount'))
+        deletePreviousConsoleMessages(
+            consoleMessages,
+            messageExists(consoleMessages, 'stakeAmount')
+        );
         const stakeUpdate: RegExpMatchArray | null = stakeUpdateMessage.match(
             /"stakeAmount":(\d+(\.\d+)?)/
         );
@@ -55,7 +63,10 @@ export const getWinAmountFromConsoleMessages = async (
     );
 
     if (winUpdateMessage) {
-        deletePreviousConsoleMessages(consoleMessages, messageExists(consoleMessages, 'winUpdate'))
+        deletePreviousConsoleMessages(
+            consoleMessages,
+            messageExists(consoleMessages, 'winUpdate')
+        );
         const winUpdate: RegExpMatchArray | null = winUpdateMessage.match(
             /"winAmount":(\d+(\.\d+)?)/
             ///(?<="winAmount":).*(?=\,)/
