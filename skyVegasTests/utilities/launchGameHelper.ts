@@ -1,19 +1,22 @@
-import { type Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
+
 import { validateConsoleMessages } from './validateConsoleMessagesHelper';
+import { ExpectedMessage } from '../../types/expectedMessage';
 
 export const launchGame = async (
     page: Page,
     gameName,
     consoleMessages: string[]
 ) => {
-    await page.getByText('Search for games...').click();
-    await new Promise((r) => setTimeout(r, 2000));
-    await page.getByPlaceholder('Search for games...').fill(gameName);
-    await new Promise((r) => setTimeout(r, 2000));
-    await page.locator('.tile-footer-wrapper').first().click();
+    const searchForGamesText = 'Search for games...'
+    await expect(page.locator('table.ssc-wldw tbody')).not.toContainText("Loading...");
+    await page.getByText(searchForGamesText).click();
+    await page.getByPlaceholder(searchForGamesText).fill(gameName);
+    await expect(page.locator('.search-box .game-tile-from-search-component .tile-container').first()).toBeAttached()
+    await page.locator('.search-box .game-tile-from-search-component .tile-container').first().click();
+
     await validateConsoleMessages(
-        'gameLoadComplete',
+        ExpectedMessage.GAME_LOAD_COMPLETE,
         consoleMessages,
-        [4_000, 6_000, 8_000, 15_000]
     );
 };

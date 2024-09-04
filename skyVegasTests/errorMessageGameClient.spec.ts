@@ -26,6 +26,7 @@ readGames().forEach((game) => {
         test('error message', async ({ browser }) => {
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
+
             await page
                 .frameLocator('#root iframe')
                 .getByRole('button', { name: 'Deposit' })
