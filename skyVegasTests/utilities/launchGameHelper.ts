@@ -8,9 +8,6 @@ export const launchGame = async (
     gameName,
     consoleMessages: string[]
 ) => {
-    const searchForGamesText = 'SystemSearchSearch for games';
-    const placeholderText = 'Search for games...';
-
     await expect(async () => {
         let amount = await page.locator('table.ssc-wldw tbody').textContent();
         const numberRegex = /[\d,]+\.\d{2}/g;
@@ -21,9 +18,8 @@ export const launchGame = async (
         timeout: 60_000,
     });
 
-    await page.getByText(searchForGamesText).click();
-
-    await page.getByPlaceholder(placeholderText).fill(gameName);
+    await page.locator('.search-bar-container').click();
+    await page.locator('#search-field').fill(gameName);
     await expect(
         page
             .locator(
