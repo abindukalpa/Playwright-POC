@@ -100,22 +100,18 @@ readGames().forEach((game) => {
             console.log('startBalance: ' + startBalance);
             console.log('totalStakeAmount at the start: ' + totalStakeAmount);
 
-            counter ++
-            console.log("spin " + counter)
-            console.log("console " + consoleMessages)
+            counter++;
+            console.log('spin ' + counter);
+            console.log('console ' + consoleMessages);
             await firstSpin(page, consoleMessages);
-           
 
             let winAmount =
                 await getWinAmountFromConsoleMessages(consoleMessages);
 
             while (winAmount === 0) {
-
-                counter ++
-                console.log("spin " + counter)
+                counter++;
+                console.log('spin ' + counter);
                 await spin(page, consoleMessages);
-                
-                
 
                 winAmount =
                     await getWinAmountFromConsoleMessages(consoleMessages);
@@ -123,9 +119,9 @@ readGames().forEach((game) => {
                 totalStakeAmount += stakeAmount;
 
                 if (winAmount === 0) {
-                    console.log("Spin one more time!")
+                    console.log('Spin one more time!');
                 } else {
-                    console.log("Stop spinning!")
+                    console.log('Stop spinning!');
                 }
             }
 

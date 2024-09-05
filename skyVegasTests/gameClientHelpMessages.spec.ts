@@ -44,7 +44,7 @@ readGames().forEach((game) => {
             await page
                 .frameLocator('#root iframe')
                 .getByRole('link', { name: 'Game Help' })
-                .waitFor({state: "attached"});
+                .waitFor({ state: 'attached' });
             await page
                 .frameLocator('#root iframe')
                 .getByRole('link', { name: 'Game Help' })

@@ -26,7 +26,7 @@ readGames().forEach((game) => {
             await launchGame(page, game, consoleMessages);
             await validateConsoleMessages(
                 ExpectedMessage.GAME_LOAD_COMPLETE,
-                consoleMessages,
+                consoleMessages
             );
         });
     });
