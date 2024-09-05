@@ -5,17 +5,18 @@ import {
     startEventListener,
     firstSpin,
     readGames,
-    getBalanceFromConsoleMessages,
-    getStakeAmountFromConsoleMessages,
-    getWinAmountFromConsoleMessages,
     spin,
+    getValueFromConsoleMessages,
 } from './utilities';
+import { ExpectedMessage } from '../types/expectedMessage';
 
-// TODO:
-
-// we need to also check the visuals
-
-// refactor to combine the 2 functions, maybe even move them into a helper function
+const currencyStringToNumber = (currencyString: string): number => {
+    // Remove any non-digit characters except for the decimal point
+    const cleanedString = currencyString.replace(/[^\d.-]/g, '');
+    // Convert the cleaned string to a number
+    const numberValue = parseFloat(cleanedString);
+    return numberValue;
+};
 
 let page: Page;
 readGames().forEach((game) => {
@@ -31,116 +32,179 @@ readGames().forEach((game) => {
 
         test('gamePlayForLoss', async () => {
             const consoleMessages: string[] = [];
+            let numberOfSpins = 0;
             startEventListener(page, consoleMessages);
 
             await launchGame(page, game, consoleMessages);
 
-            const startBalance =
-                await getBalanceFromConsoleMessages(consoleMessages);
-            const stakeAmount =
-                await getStakeAmountFromConsoleMessages(consoleMessages);
-            let totalStakeAmount = stakeAmount;
-            console.log('startBalance: ' + startBalance);
-            console.log('totalStakeAmount at the start: ' + totalStakeAmount);
-            console.log('/n');
-
-            await firstSpin(page, consoleMessages);
-
-            let totalWinAmount = 0;
-            let winAmount =
-                await getWinAmountFromConsoleMessages(consoleMessages);
-            totalWinAmount += winAmount;
-
-            while (winAmount > 0) {
-                await spin(page, consoleMessages);
-
-                winAmount =
-                    await getWinAmountFromConsoleMessages(consoleMessages);
-                totalWinAmount += winAmount;
-
-                console.log('winAmount inside loop: ' + winAmount);
-
-                totalStakeAmount += stakeAmount;
-
-                console.log(
-                    'totalStakeAmount inside loop: ' + totalStakeAmount
-                );
-
-                console.log(consoleMessages);
-            }
-
-            const consoleEndBalance =
-                await getBalanceFromConsoleMessages(consoleMessages);
-
-            const endBalanceCalculated = Number(
-                (startBalance - totalStakeAmount + totalWinAmount).toFixed(2)
+            const startBalanceConsole = await getValueFromConsoleMessages(
+                consoleMessages,
+                ExpectedMessage.BALANCE_UPDATE
             );
 
-            console.log('startBalance: ' + startBalance);
-            console.log('stakeAmount: ' + totalStakeAmount);
-            console.log('consoleEndBalance: ' + consoleEndBalance);
-            console.log('winAmount: ' + totalWinAmount);
-            console.log('endBalanceCalculated: ' + endBalanceCalculated);
+            const startBallanceScreen = currencyStringToNumber(
+                (await page
+                    .frameLocator('#root iframe')
+                    .locator('em.value.main-wallet')
+                    .textContent())!
+            );
 
-            expect(endBalanceCalculated).toEqual(consoleEndBalance);
+            const stakeAmountConsole = await getValueFromConsoleMessages(
+                consoleMessages,
+                ExpectedMessage.STAKE_UPDATE
+            );
+
+            const stakeAmountScreen = currencyStringToNumber(
+                (await page
+                    .frameLocator('#root iframe')
+                    .locator('em.value.stake-wallet')
+                    .textContent())!
+            );
+            console.log('stakeAmountScreen ' + stakeAmountScreen);
+
+            await firstSpin(page, consoleMessages);
+            numberOfSpins++;
+
+            let totalWinAmountConsole = 0;
+            let winAmountConsole = await getValueFromConsoleMessages(
+                consoleMessages,
+                ExpectedMessage.WIN_UPDATE
+            );
+            totalWinAmountConsole += winAmountConsole;
+
+            let totalWinAmountScreen = 0;
+            let winAmountScreen = currencyStringToNumber(
+                (await page
+                    .frameLocator('#root iframe')
+                    .locator('em.value.won-wallet')
+                    .textContent())!
+            );
+            totalWinAmountScreen += winAmountScreen;
+
+            while (winAmountConsole > 0) {
+                await spin(page, consoleMessages);
+                numberOfSpins++;
+
+                winAmountConsole = await getValueFromConsoleMessages(
+                    consoleMessages,
+                    ExpectedMessage.WIN_UPDATE
+                );
+                totalWinAmountConsole += winAmountConsole;
+
+                winAmountScreen = currencyStringToNumber(
+                    (await page
+                        .frameLocator('#root iframe')
+                        .locator('em.value.won-wallet')
+                        .textContent())!
+                );
+                totalWinAmountScreen += winAmountScreen;
+            }
+
+            const endBalanceConsole = await getValueFromConsoleMessages(
+                consoleMessages,
+                ExpectedMessage.BALANCE_UPDATE
+            );
+
+            const endBalanceScreen = currencyStringToNumber(
+                (await page
+                    .frameLocator('#root iframe')
+                    .locator('em.value.main-wallet')
+                    .textContent())!
+            );
+
+            const endWinAmountScreen = currencyStringToNumber(
+                (await page
+                    .frameLocator('#root iframe')
+                    .locator('em.value.won-wallet')
+                    .textContent())!
+            );
+            console.log('endWinAmountScreen ' + endWinAmountScreen);
+
+            const endWinLossAmountScreen = currencyStringToNumber(
+                (await page
+                    .frameLocator('#root iframe')
+                    .locator('em.value.gaming-session-profit-and-loss')
+                    .textContent())!
+            );
+            console.log('endWinLossAmountScreen ' + endWinLossAmountScreen);
+
+            const endWinLossAmountConsole = Number(
+                (
+                    totalWinAmountConsole -
+                    stakeAmountConsole * numberOfSpins
+                ).toFixed(2)
+            );
+
+            const endBalanceConsoleCalculated = Number(
+                (
+                    startBalanceConsole -
+                    stakeAmountConsole * numberOfSpins +
+                    totalWinAmountConsole
+                ).toFixed(2)
+            );
+
+            const endBalanceScreenCalculated = Number(
+                (
+                    startBallanceScreen -
+                    stakeAmountScreen * numberOfSpins +
+                    totalWinAmountScreen
+                ).toFixed(2)
+            );
+
+            expect(endBalanceConsoleCalculated).toEqual(
+                endBalanceScreenCalculated
+            );
+
+            expect(endWinLossAmountConsole).toEqual(endWinLossAmountScreen);
+
+            expect(endBalanceConsoleCalculated).toEqual(endBalanceConsole);
+
+            expect(endBalanceScreenCalculated).toEqual(endBalanceScreen);
         });
 
         test('gamePlayForWin', async () => {
             const consoleMessages: string[] = [];
-            let counter = 0;
             startEventListener(page, consoleMessages);
 
             await launchGame(page, game, consoleMessages);
 
-            const startBalance =
-                await getBalanceFromConsoleMessages(consoleMessages);
-            const stakeAmount =
-                await getStakeAmountFromConsoleMessages(consoleMessages);
+            const startBalance = await getValueFromConsoleMessages(
+                consoleMessages,
+                ExpectedMessage.BALANCE_UPDATE
+            );
+            const stakeAmount = await getValueFromConsoleMessages(
+                consoleMessages,
+                ExpectedMessage.STAKE_UPDATE
+            );
             let totalStakeAmount = stakeAmount;
-            console.log('startBalance: ' + startBalance);
-            console.log('totalStakeAmount at the start: ' + totalStakeAmount);
 
-            counter++;
-            console.log('spin ' + counter);
-            console.log('console ' + consoleMessages);
             await firstSpin(page, consoleMessages);
 
-            let winAmount =
-                await getWinAmountFromConsoleMessages(consoleMessages);
+            let winAmount = await getValueFromConsoleMessages(
+                consoleMessages,
+                ExpectedMessage.WIN_UPDATE
+            );
 
             while (winAmount === 0) {
-                counter++;
-                console.log('spin ' + counter);
                 await spin(page, consoleMessages);
 
-                winAmount =
-                    await getWinAmountFromConsoleMessages(consoleMessages);
+                winAmount = await getValueFromConsoleMessages(
+                    consoleMessages,
+                    ExpectedMessage.WIN_UPDATE
+                );
 
                 totalStakeAmount += stakeAmount;
-
-                if (winAmount === 0) {
-                    console.log('Spin one more time!');
-                } else {
-                    console.log('Stop spinning!');
-                }
             }
 
-            const consoleEndBalance =
-                await getBalanceFromConsoleMessages(consoleMessages);
+            const consoleEndBalance = await getValueFromConsoleMessages(
+                consoleMessages,
+                ExpectedMessage.BALANCE_UPDATE
+            );
 
             const endBalanceCalculated = Number(
                 (startBalance - totalStakeAmount + winAmount).toFixed(2)
             );
-
-            console.log('startBalance: ' + startBalance);
-            console.log('totalStakeAmount: ' + totalStakeAmount);
-            console.log('consoleEndBalance: ' + consoleEndBalance);
-            console.log('winAmount: ' + winAmount);
-            console.log('endBalanceCalculated: ' + endBalanceCalculated);
-
             expect(endBalanceCalculated).toEqual(consoleEndBalance);
         });
     });
 });
-
-// Test timeout a problem

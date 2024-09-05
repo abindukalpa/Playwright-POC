@@ -6,8 +6,4 @@ export { messageExists } from './messageExistsHelper';
 export { firstSpin, spin } from './makeSpinHelper';
 export { makeDeposit } from './makeDepositHelper';
 export { readGames } from './readGamesHelper';
-export {
-    getBalanceFromConsoleMessages,
-    getStakeAmountFromConsoleMessages,
-    getWinAmountFromConsoleMessages,
-} from './getValuesFromConsoleMessagesHelper';
+export { getValueFromConsoleMessages } from './getValuesFromConsoleMessagesHelper';

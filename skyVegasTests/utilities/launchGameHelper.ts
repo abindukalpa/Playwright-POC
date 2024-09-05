@@ -1,4 +1,5 @@
 import { expect, type Page } from '@playwright/test';
+
 import { validateConsoleMessages } from './validateConsoleMessagesHelper';
 import { ExpectedMessage } from '../../types/expectedMessage';
 
@@ -7,15 +8,32 @@ export const launchGame = async (
     gameName,
     consoleMessages: string[]
 ) => {
-    const searchForGamesText = 'Search for games...'
-    await expect(page.locator('table.ssc-wldw tbody')).not.toContainText("Loading...");
-    await page.getByText(searchForGamesText).click();
-    await page.getByPlaceholder(searchForGamesText).fill(gameName);
-    await expect(page.locator('.search-box .game-tile-from-search-component .tile-container').first()).toBeAttached()
-    await page.locator('.search-box .game-tile-from-search-component .tile-container').first().click();
+    await expect(async () => {
+        const amount = await page.locator('table.ssc-wldw tbody').textContent();
+        const numberRegex = /[\d,]+\.\d{2}/g;
+        const numbers = amount?.match(numberRegex);
+        expect(numbers?.length).toEqual(2); //expect 2 numbers Main and Bonus
+    }).toPass({
+        intervals: [5_000, 10_000, 15_000],
+        timeout: 60_000,
+    });
+
+    await page.locator('.search-bar-container').click();
+    await page.locator('#search-field').fill(gameName);
+    await expect(
+        page
+            .locator(
+                '.search-box .game-tile-from-search-component .tile-container'
+            )
+            .first()
+    ).toBeAttached();
+    await page
+        .locator('.search-box .game-tile-from-search-component .tile-container')
+        .first()
+        .click();
 
     await validateConsoleMessages(
         ExpectedMessage.GAME_LOAD_COMPLETE,
-        consoleMessages,
+        consoleMessages
     );
 };

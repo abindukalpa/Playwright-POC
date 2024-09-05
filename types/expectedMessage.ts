@@ -11,6 +11,7 @@ export enum ExpectedMessage {
     GAME_HELP = '[Game Window -> Game Client] send notification: "gameHelp"',
     GAME_LOAD_COMPLETE = 'gameLoadComplete',
     PAY_TABLE = 'toggle paytable',
+    PLAY_MODE_UPDATE = 'playModeUpdate',
     REALITY_CHECK = 'REALITY_CHECK_ELAPSED_ERROR',
     SOUND_CHECK_GAME_OFF = '"settingName":"sound","settingValue":"off"',
     SOUND_CHECK_GAME_ON = '"settingName":"sound","settingValue":"on"',
@@ -18,5 +19,5 @@ export enum ExpectedMessage {
     SOUND_CHECK_TOOL_BAR_ON = '"sound":" true"',
     STAKE_UPDATE = 'stakeUpdate',
     START_SPIN = 'gameAnimationStart',
-    PLAY_MODE_UPDATE = 'playModeUpdate',
+    WIN_UPDATE = 'winUpdate',
 }
