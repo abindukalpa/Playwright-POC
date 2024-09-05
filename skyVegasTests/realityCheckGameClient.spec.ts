@@ -12,18 +12,18 @@ import { ExpectedMessage } from '../types/expectedMessage';
 
 readGames().forEach((game) => {
     let page: Page;
-    const consoleMessages: string[] = [];
     test.describe(`Testing with text: ${game}`, () => {
-        test.beforeAll(async ({ browser }) => {
+        test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
             await login(page);
         });
 
-        test.afterAll(async () => {
+        test.afterEach(async () => {
             await page.close();
         });
 
         test.skip('realityCheck', async () => {
+            const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
 
             await launchGame(page, game, consoleMessages);

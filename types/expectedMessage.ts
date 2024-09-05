@@ -18,4 +18,5 @@ export enum ExpectedMessage {
     SOUND_CHECK_TOOL_BAR_ON = '"sound":" true"',
     STAKE_UPDATE = 'stakeUpdate',
     START_SPIN = 'gameAnimationStart',
+    PLAY_MODE_UPDATE = 'playModeUpdate',
 }

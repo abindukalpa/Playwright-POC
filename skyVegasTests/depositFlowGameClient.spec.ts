@@ -10,19 +10,19 @@ import {
 import { ExpectedMessage } from '../types/expectedMessage';
 
 readGames().forEach((game) => {
-    const consoleMessages: string[] = [];
     let page: Page;
     test.describe(`Testing with text: ${game}`, () => {
-        test.beforeAll(async ({ browser }) => {
+        test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
             await login(page);
         });
 
-        test.afterAll(async () => {
+        test.afterEach(async () => {
             await page.close();
         });
 
         test('Test deposit flow', async ({ browser }) => {
+            const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
             await page

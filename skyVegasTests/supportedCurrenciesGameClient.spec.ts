@@ -13,12 +13,12 @@ readGames().forEach((game) => {
     const consoleMessages: string[] = [];
 
     test.describe(`Testing with text: ${game}`, () => {
-        test.beforeAll(async ({ browser }) => {
+        test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
             await login(page);
         });
 
-        test.afterAll(async () => {
+        test.afterEach(async () => {
             await page.close();
         });
 

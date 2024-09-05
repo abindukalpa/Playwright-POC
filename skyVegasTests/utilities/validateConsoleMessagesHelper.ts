@@ -5,7 +5,7 @@ export const validateConsoleMessages = async (
     expectedMessage: string,
     consoleMessages: string[],
     deleteMessages = false,
-    intervals: number[] = [5_000, 10_000, 15_000],
+    intervals: number[] = [5_000, 10_000, 15_000, 20_000],
     timeout = 60_000
 ) => {
     await expect(async (): Promise<void> => {

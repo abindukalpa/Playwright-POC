@@ -42,6 +42,7 @@ readGames().forEach((game) => {
             let totalStakeAmount = stakeAmount;
             console.log('startBalance: ' + startBalance);
             console.log('totalStakeAmount at the start: ' + totalStakeAmount);
+            console.log('/n');
 
             await firstSpin(page, consoleMessages);
 
@@ -86,6 +87,7 @@ readGames().forEach((game) => {
 
         test('gamePlayForWin', async () => {
             const consoleMessages: string[] = [];
+            let counter = 0;
             startEventListener(page, consoleMessages);
 
             await launchGame(page, game, consoleMessages);
@@ -98,26 +100,33 @@ readGames().forEach((game) => {
             console.log('startBalance: ' + startBalance);
             console.log('totalStakeAmount at the start: ' + totalStakeAmount);
 
+            counter ++
+            console.log("spin " + counter)
+            console.log("console " + consoleMessages)
             await firstSpin(page, consoleMessages);
+           
 
             let winAmount =
                 await getWinAmountFromConsoleMessages(consoleMessages);
 
-            while (winAmount == 0) {
+            while (winAmount === 0) {
+
+                counter ++
+                console.log("spin " + counter)
                 await spin(page, consoleMessages);
+                
+                
 
                 winAmount =
                     await getWinAmountFromConsoleMessages(consoleMessages);
 
-                console.log('winAmount inside loop: ' + winAmount);
-
                 totalStakeAmount += stakeAmount;
 
-                console.log(
-                    'totalStakeAmount inside loop: ' + totalStakeAmount
-                );
-
-                console.log(consoleMessages);
+                if (winAmount === 0) {
+                    console.log("Spin one more time!")
+                } else {
+                    console.log("Stop spinning!")
+                }
             }
 
             const consoleEndBalance =
@@ -128,7 +137,7 @@ readGames().forEach((game) => {
             );
 
             console.log('startBalance: ' + startBalance);
-            console.log('stakeAmount: ' + totalStakeAmount);
+            console.log('totalStakeAmount: ' + totalStakeAmount);
             console.log('consoleEndBalance: ' + consoleEndBalance);
             console.log('winAmount: ' + winAmount);
             console.log('endBalanceCalculated: ' + endBalanceCalculated);
