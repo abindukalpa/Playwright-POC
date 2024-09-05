@@ -28,8 +28,7 @@ readGames().forEach((game) => {
             await launchGame(page, game, consoleMessages);
             const soundToggleIcon = page
                 .frameLocator('#root iframe')
-                .locator('i')
-                .nth(2);
+                .locator('i.icon-volume');
 
             if (
                 !(await soundToggleIcon.getAttribute('class'))?.includes(

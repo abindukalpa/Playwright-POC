@@ -8,24 +8,14 @@ export const launchGame = async (
     consoleMessages: string[]
 ) => {
     const searchForGamesText = 'Search for games...'
+    await expect(page.locator('table.ssc-wldw tbody')).not.toContainText("Loading...");
+    await page.getByText(searchForGamesText).click();
+    await page.getByPlaceholder(searchForGamesText).fill(gameName);
+    await expect(page.locator('.search-box .game-tile-from-search-component .tile-container').first()).toBeAttached()
+    await page.locator('.search-box .game-tile-from-search-component .tile-container').first().click();
 
-// wait for wallet amount to appear, which should ensure the page has loaded correctly
-await expect(page.locator('table.ssc-wldw tbody')).toContainText('£');
-
- // wait for wallet amount to appear, which should ensure the page has loaded correctly
-await page.getByText(searchForGamesText).click();
-
-// type the game we are searching for in the text box
-await page.getByPlaceholder(searchForGamesText).fill(gameName);
-
-// check that after typing in the search box, the results have appeared
-await expect(page.locator('.search-box .game-tile-from-search-component .tile-container').first()).toBeAttached()
-
-// click the first game result in the list
-await page.locator('.search-box .game-tile-from-search-component .tile-container').first().click();
-
-await validateConsoleMessages(
-    ExpectedMessage.GAME_LOAD_COMPLETE,
-    consoleMessages,
-);
+    await validateConsoleMessages(
+        ExpectedMessage.GAME_LOAD_COMPLETE,
+        consoleMessages,
+    );
 };
