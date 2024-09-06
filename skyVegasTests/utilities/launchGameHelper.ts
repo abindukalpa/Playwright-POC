@@ -9,10 +9,12 @@ export const launchGame = async (
     consoleMessages: string[]
 ) => {
     await expect(async () => {
-        let amount = await page.locator('table.ssc-wldw tbody').textContent();
+        let accountFundsInfo = await page
+            .locator('table.ssc-wldw tbody')
+            .textContent();
         const numberRegex = /[\d,]+\.\d{2}/g;
-        const numbers = amount?.match(numberRegex);
-        expect(numbers?.length).toEqual(2); //expect 2 numbers Main and Bonus
+        const numericValues = accountFundsInfo?.match(numberRegex);
+        expect(numericValues?.length).toEqual(2); //expect 2 numbers Main and Bonus
     }).toPass({
         intervals: [5_000, 10_000, 15_000],
         timeout: 60_000,
