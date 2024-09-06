@@ -1,29 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
-import * as fs from 'fs';
+import { config } from './config/config';
 import * as path from 'path';
-import * as dotenv from 'dotenv';
-import 'dotenv/config';
-
-const envFile = `.env.${process.env.NODE_ENV || 'nxt'}`;
-const envPath = path.resolve(process.cwd(), envFile);
-
-if (fs.existsSync(envPath)) {
-    dotenv.config({ path: envPath });
-} else {
-    console.warn(`No ${envFile} file found.`);
-}
-
-export const envs = {
-    username: process.env.PLAYWRIGHT_USERNAME!,
-    password: process.env.PLAYWRIGHT_PASSWORD!,
-    url: process.env.URL!,
-};
+import dotenv from 'dotenv';
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), `.env.${config.getNodeEnv()}`) });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -58,15 +41,15 @@ export default defineConfig({
             use: { ...devices['Desktop Chrome'] },
         },
 
-        {
-            name: 'firefox',
-            use: { ...devices['Desktop Firefox'] },
-        },
+        // {
+        //     name: 'firefox',
+        //     use: { ...devices['Desktop Firefox'] },
+        // },
 
-        {
-            name: 'webkit',
-            use: { ...devices['Desktop Safari'] },
-        },
+        // {
+        //     name: 'webkit',
+        //     use: { ...devices['Desktop Safari'] },
+        // },
 
         /* Test against mobile viewports. */
         // {

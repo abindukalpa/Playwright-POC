@@ -12,7 +12,6 @@ export const validateConsoleMessages = async (
         const index = messageExists(consoleMessages, expectedMessage);
         const isValidated = index !== -1;
         if (isValidated && deleteMessages) {
-            // clear console messages
             deletePreviousConsoleMessages(consoleMessages, index);
         }
         expect(isValidated).toBeTruthy();

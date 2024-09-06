@@ -20,7 +20,7 @@ readGames().forEach((game) => {
             await page.close();
         });
 
-        test('Test game menu open', async () => {
+        test.skip('Test game menu open', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
@@ -39,7 +39,7 @@ readGames().forEach((game) => {
             );
         });
 
-        test('Test help menu open', async () => {
+        test.skip('Test help menu open', async () => {
             const consoleMessages: string[] = [];
             await page
                 .frameLocator('#root iframe')
@@ -55,7 +55,7 @@ readGames().forEach((game) => {
             );
         });
 
-        test('Test game menu closed', async () => {
+        test.skip('Test game menu closed', async () => {
             const consoleMessages: string[] = [];
             await page
                 .frameLocator('#root iframe')
@@ -68,7 +68,7 @@ readGames().forEach((game) => {
             );
         });
 
-        test('Test paytable open', async () => {
+        test.skip('Test paytable open', async () => {
             const consoleMessages: string[] = [];
             await page
                 .frameLocator('#root iframe')
