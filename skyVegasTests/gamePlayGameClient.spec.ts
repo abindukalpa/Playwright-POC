@@ -224,7 +224,11 @@ readGames().forEach((game) => {
             );
 
             const endBalanceConsoleCalculated = Number(
-                (startBalanceConsole - (stakeAmountConsole * numberOfSpins) + winAmountConsole).toFixed(2)
+                (
+                    startBalanceConsole -
+                    stakeAmountConsole * numberOfSpins +
+                    winAmountConsole
+                ).toFixed(2)
             );
             const endBalanceScreenCalculated = Number(
                 (
@@ -235,10 +239,9 @@ readGames().forEach((game) => {
             );
 
             const endWinLossAmountConsole = Number(
-                (
-                    winAmountConsole -
-                    stakeAmountConsole * numberOfSpins
-                ).toFixed(2)
+                (winAmountConsole - stakeAmountConsole * numberOfSpins).toFixed(
+                    2
+                )
             );
             const endWinLossAmountScreen = currencyStringToNumber(
                 (await page
