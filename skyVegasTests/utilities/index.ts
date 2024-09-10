@@ -7,3 +7,4 @@ export { firstSpin, spin } from './makeSpinHelper';
 export { makeDeposit } from './makeDepositHelper';
 export { readGames } from './readGamesHelper';
 export { getValueFromConsoleMessages } from './getValuesFromConsoleMessagesHelper';
+export { currencyStringToNumber } from './getValuesFromConsoleMessagesHelper';

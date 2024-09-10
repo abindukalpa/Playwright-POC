@@ -4,6 +4,19 @@ import {
     validateConsoleMessages,
 } from './validateConsoleMessagesHelper';
 
+export const currencyStringToNumber = (
+    currencyString: string | null
+): number => {
+    if (currencyString == null) {
+        return 0;
+    }
+    // Remove any non-digit characters except for the decimal point
+    const cleanedString = currencyString.replace(/[^\d.-]/g, '');
+    // Convert the cleaned string to a number
+    const numberValue = parseFloat(cleanedString);
+    return Number(numberValue.toFixed(2));
+};
+
 export const getValueFromConsoleMessages = async (
     consoleMessages: string[],
     valueName: string

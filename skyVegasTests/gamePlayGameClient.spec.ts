@@ -7,21 +7,15 @@ import {
     readGames,
     spin,
     getValueFromConsoleMessages,
+    currencyStringToNumber,
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
-
-const currencyStringToNumber = (currencyString: string): number => {
-    // Remove any non-digit characters except for the decimal point
-    const cleanedString = currencyString.replace(/[^\d.-]/g, '');
-    // Convert the cleaned string to a number
-    const numberValue = parseFloat(cleanedString);
-    return Number(numberValue.toFixed(2));
-};
 
 let page: Page;
 readGames().forEach((game) => {
     test.describe(`Testing with text: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
+            test.setTimeout(300000);
             page = await browser.newPage();
             await login(page);
         });
@@ -43,10 +37,10 @@ readGames().forEach((game) => {
             );
 
             const startBallanceScreen = currencyStringToNumber(
-                (await page
+                await page
                     .frameLocator('#root iframe')
                     .locator('em.value.main-wallet')
-                    .textContent())!
+                    .textContent()
             );
 
             const stakeAmountConsole = await getValueFromConsoleMessages(
@@ -55,10 +49,10 @@ readGames().forEach((game) => {
             );
 
             const stakeAmountScreen = currencyStringToNumber(
-                (await page
+                await page
                     .frameLocator('#root iframe')
                     .locator('em.value.stake-wallet')
-                    .textContent())!
+                    .textContent()
             );
 
             await firstSpin(page, consoleMessages);
@@ -73,10 +67,10 @@ readGames().forEach((game) => {
 
             let totalWinAmountScreen = 0;
             let winAmountScreen = currencyStringToNumber(
-                (await page
+                await page
                     .frameLocator('#root iframe')
                     .locator('em.value.won-wallet')
-                    .textContent())!
+                    .textContent()
             );
             totalWinAmountScreen += winAmountScreen;
 
@@ -91,10 +85,10 @@ readGames().forEach((game) => {
                 totalWinAmountConsole += winAmountConsole;
 
                 winAmountScreen = currencyStringToNumber(
-                    (await page
+                    await page
                         .frameLocator('#root iframe')
                         .locator('em.value.won-wallet')
-                        .textContent())!
+                        .textContent()
                 );
                 totalWinAmountScreen += winAmountScreen;
             }
@@ -105,17 +99,17 @@ readGames().forEach((game) => {
             );
 
             const endBalanceScreen = currencyStringToNumber(
-                (await page
+                await page
                     .frameLocator('#root iframe')
                     .locator('em.value.main-wallet')
-                    .textContent())!
+                    .textContent()
             );
 
             const endWinLossAmountScreen = currencyStringToNumber(
-                (await page
+                await page
                     .frameLocator('#root iframe')
                     .locator('em.value.gaming-session-profit-and-loss')
-                    .textContent())!
+                    .textContent()
             );
 
             const endWinLossAmountConsole = Number(
@@ -150,6 +144,10 @@ readGames().forEach((game) => {
             expect(endBalanceConsoleCalculated).toEqual(endBalanceConsole);
 
             expect(endBalanceScreenCalculated).toEqual(endBalanceScreen);
+
+            expect(endBalanceScreenCalculated).toEqual(
+                endBalanceConsoleCalculated
+            );
         });
 
         test('gamePlayForWin', async () => {
@@ -164,10 +162,10 @@ readGames().forEach((game) => {
                 ExpectedMessage.BALANCE_UPDATE
             );
             const startBallanceScreen = currencyStringToNumber(
-                (await page
+                await page
                     .frameLocator('#root iframe')
                     .locator('em.value.main-wallet')
-                    .textContent())!
+                    .textContent()
             );
 
             const stakeAmountConsole = await getValueFromConsoleMessages(
@@ -175,10 +173,10 @@ readGames().forEach((game) => {
                 ExpectedMessage.STAKE_UPDATE
             );
             const stakeAmountScreen = currencyStringToNumber(
-                (await page
+                await page
                     .frameLocator('#root iframe')
                     .locator('em.value.stake-wallet')
-                    .textContent())!
+                    .textContent()
             );
 
             await firstSpin(page, consoleMessages);
@@ -189,10 +187,10 @@ readGames().forEach((game) => {
                 ExpectedMessage.WIN_UPDATE
             );
             let winAmountScreen = currencyStringToNumber(
-                (await page
+                await page
                     .frameLocator('#root iframe')
                     .locator('em.value.won-wallet')
-                    .textContent())!
+                    .textContent()
             );
 
             while (winAmountConsole === 0 && winAmountScreen === 0) {
@@ -205,10 +203,10 @@ readGames().forEach((game) => {
                 );
 
                 winAmountScreen = currencyStringToNumber(
-                    (await page
+                    await page
                         .frameLocator('#root iframe')
                         .locator('em.value.won-wallet')
-                        .textContent())!
+                        .textContent()
                 );
             }
 
@@ -217,10 +215,10 @@ readGames().forEach((game) => {
                 ExpectedMessage.BALANCE_UPDATE
             );
             const endBalanceScreen = currencyStringToNumber(
-                (await page
+                await page
                     .frameLocator('#root iframe')
                     .locator('em.value.main-wallet')
-                    .textContent())!
+                    .textContent()
             );
 
             const endBalanceConsoleCalculated = Number(
@@ -244,10 +242,10 @@ readGames().forEach((game) => {
                 )
             );
             const endWinLossAmountScreen = currencyStringToNumber(
-                (await page
+                await page
                     .frameLocator('#root iframe')
                     .locator('em.value.gaming-session-profit-and-loss')
-                    .textContent())!
+                    .textContent()
             );
 
             expect(endWinLossAmountConsole).toEqual(endWinLossAmountScreen);
@@ -255,6 +253,10 @@ readGames().forEach((game) => {
             expect(endBalanceConsoleCalculated).toEqual(endBalanceConsole);
 
             expect(endBalanceScreenCalculated).toEqual(endBalanceScreen);
+
+            expect(endBalanceScreenCalculated).toEqual(
+                endBalanceConsoleCalculated
+            );
         });
     });
 });
