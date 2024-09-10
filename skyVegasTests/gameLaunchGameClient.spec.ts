@@ -9,7 +9,6 @@ import {
 import { ExpectedMessage } from '../types/expectedMessage';
 
 readGames().forEach((game) => {
-    const consoleMessages: string[] = [];
     let page: Page;
     test.describe(`Testing with text: ${game}`, () => {
         test.beforeAll(async ({ browser }) => {
@@ -22,6 +21,7 @@ readGames().forEach((game) => {
         });
 
         test('gameLaunch', async () => {
+            const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
             await validateConsoleMessages(

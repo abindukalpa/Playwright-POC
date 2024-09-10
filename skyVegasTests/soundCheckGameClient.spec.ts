@@ -4,27 +4,26 @@ import {
     validateConsoleMessages,
     login,
     startEventListener,
-    messageExists,
     readGames,
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
 
 readGames().forEach((game) => {
-    const consoleMessages: string[] = [];
     let page: Page;
     const ICON_MUTED_CLASS = 'muted';
 
     test.describe(`Testing with text: ${game}`, () => {
-        test.beforeAll(async ({ browser }) => {
+        test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
             await login(page);
         });
 
-        test.afterAll(async () => {
+        test.afterEach(async () => {
             await page.close();
         });
 
         test('Test sound toggle', async () => {
+            const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
             const soundToggleIcon = page
@@ -48,15 +47,18 @@ readGames().forEach((game) => {
             ).toBeFalsy;
             await validateConsoleMessages(
                 ExpectedMessage.SOUND_CHECK_GAME_ON,
-                consoleMessages
+                consoleMessages,
+                true
             );
+
             await soundToggleIcon.click();
             expect(await soundToggleIcon.getAttribute('class')).toContain(
                 ICON_MUTED_CLASS
             );
             await validateConsoleMessages(
                 ExpectedMessage.SOUND_CHECK_GAME_OFF,
-                consoleMessages
+                consoleMessages,
+                true
             );
         });
     });

@@ -8,3 +8,4 @@ node_modules/
 *.png
 .npm_installed
 .image_built
+.vscode

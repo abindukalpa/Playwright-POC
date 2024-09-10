@@ -9,7 +9,7 @@ export const launchGame = async (
     consoleMessages: string[]
 ) => {
     await expect(async () => {
-        let accountFundsInfo = await page
+        const accountFundsInfo = await page
             .locator('table.ssc-wldw tbody')
             .textContent();
         const numberRegex = /[\d,]+\.\d{2}/g;
