@@ -20,7 +20,7 @@ readGames().forEach((game) => {
             await page.close();
         });
 
-        test.skip('Test game menu open', async () => {
+        test('Test game menu open', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
@@ -39,8 +39,10 @@ readGames().forEach((game) => {
             );
         });
 
-        test.skip('Test help menu open', async () => {
+        test('Test help menu open', async () => {
             const consoleMessages: string[] = [];
+            startEventListener(page, consoleMessages);
+            await launchGame(page, game, consoleMessages);
             await page
                 .frameLocator('#root iframe')
                 .getByRole('link', { name: 'Game Help' })
@@ -55,8 +57,10 @@ readGames().forEach((game) => {
             );
         });
 
-        test.skip('Test game menu closed', async () => {
+        test('Test game menu closed', async () => {
             const consoleMessages: string[] = [];
+            startEventListener(page, consoleMessages);
+            await launchGame(page, game, consoleMessages);
             await page
                 .frameLocator('#root iframe')
                 .getByText('MenuOpen the menu to access')
@@ -68,8 +72,10 @@ readGames().forEach((game) => {
             );
         });
 
-        test.skip('Test paytable open', async () => {
+        test('Test paytable open', async () => {
             const consoleMessages: string[] = [];
+            startEventListener(page, consoleMessages);
+            await launchGame(page, game, consoleMessages);
             await page
                 .frameLocator('#root iframe')
                 .getByRole('link', { name: 'Game Help' })
