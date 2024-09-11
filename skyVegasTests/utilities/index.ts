@@ -1,11 +1,25 @@
 export { launchGame } from './launchGameHelper';
-export { validateConsoleMessages } from './validateConsoleMessagesHelper';
+export {
+    validateConsoleMessages,
+    deletePreviousConsoleMessages,
+} from './validateConsoleMessagesHelper';
 export { login } from './loginHelper';
 export { startEventListener } from './startEventListenerHelper';
-export { messageExists } from './messageExistsHelper';
+export {
+    messageExists,
+    getIndexOfExpectedMessage,
+} from './messageExistsHelper';
 export { firstSpin, spin } from './makeSpinHelper';
 export { makeDeposit } from './makeDepositHelper';
 export { readGames } from './readGamesHelper';
 export { getValueFromConsoleMessages } from './getValuesFromConsoleMessagesHelper';
-export { currencyStringToNumber } from './getValuesFromConsoleMessagesHelper';
-export { getBalanceGameWindow, getStakeAmountGameWindow, getWinAmountGameWindow, getWinLossAmountGameWindow   } from './getValuesFromPageHelper'
+export {
+    currencyStringToNumber,
+    numberToTwoDecimalPlaces,
+} from './conversionHelper';
+export {
+    getBalanceGameWindow,
+    getStakeAmountGameWindow,
+    getWinAmountGameWindow,
+    getWinLossAmountGameWindow,
+} from './getValuesFromPageHelper';

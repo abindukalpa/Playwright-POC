@@ -8,8 +8,8 @@ import {
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
 
+let page: Page;
 readGames().forEach((game) => {
-    let page: Page;
     const ICON_MUTED_CLASS = 'muted';
 
     test.describe(`Testing with text: ${game}`, () => {

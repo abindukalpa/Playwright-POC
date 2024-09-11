@@ -11,6 +11,7 @@ import {
     getStakeAmountGameWindow,
     getWinAmountGameWindow,
     getWinLossAmountGameWindow,
+    numberToTwoDecimalPlaces,
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
 
@@ -38,15 +39,15 @@ readGames().forEach((game) => {
                 consoleMessages,
                 ExpectedMessage.BALANCE_UPDATE
             );
-            
-            const startBalanceGameWindow = await getBalanceGameWindow(page)
+
+            const startBalanceGameWindow = await getBalanceGameWindow(page);
 
             const stakeAmountConsole = await getValueFromConsoleMessages(
                 consoleMessages,
                 ExpectedMessage.STAKE_UPDATE
             );
 
-            const stakeAmountGameWindow = await getStakeAmountGameWindow(page)
+            const stakeAmountGameWindow = await getStakeAmountGameWindow(page);
 
             await firstSpin(page, consoleMessages);
             numberOfSpins++;
@@ -59,8 +60,8 @@ readGames().forEach((game) => {
             totalWinAmountConsole += winAmountConsole;
 
             let totalWinAmountGameWindow = 0;
-            let winAmountGameWindow = await getWinAmountGameWindow(page) 
-            
+            let winAmountGameWindow = await getWinAmountGameWindow(page);
+
             totalWinAmountGameWindow += winAmountGameWindow;
 
             while (winAmountConsole > 0 && winAmountGameWindow > 0) {
@@ -73,8 +74,8 @@ readGames().forEach((game) => {
                 );
                 totalWinAmountConsole += winAmountConsole;
 
-                winAmountGameWindow = await getWinAmountGameWindow(page)
-            
+                winAmountGameWindow = await getWinAmountGameWindow(page);
+
                 totalWinAmountGameWindow += winAmountGameWindow;
             }
 
@@ -83,31 +84,25 @@ readGames().forEach((game) => {
                 ExpectedMessage.BALANCE_UPDATE
             );
 
-            const endBalanceGameWindow = await getBalanceGameWindow(page) 
+            const endBalanceGameWindow = await getBalanceGameWindow(page);
 
-            const endWinLossAmountGameWindow = await getWinLossAmountGameWindow(page)
+            const endWinLossAmountGameWindow =
+                await getWinLossAmountGameWindow(page);
 
-            const endWinLossAmountConsole = Number(
-                (
-                    totalWinAmountConsole -
-                    stakeAmountConsole * numberOfSpins
-                ).toFixed(2)
+            const endWinLossAmountConsole = numberToTwoDecimalPlaces(
+                totalWinAmountConsole - stakeAmountConsole * numberOfSpins
             );
 
-            const endBalanceConsoleCalculated = Number(
-                (
-                    startBalanceConsole -
+            const endBalanceConsoleCalculated = numberToTwoDecimalPlaces(
+                startBalanceConsole -
                     stakeAmountConsole * numberOfSpins +
                     totalWinAmountConsole
-                ).toFixed(2)
             );
 
-            const endBalanceGameWindowCalculated = Number(
-                (
-                    startBalanceGameWindow -
+            const endBalanceGameWindowCalculated = numberToTwoDecimalPlaces(
+                startBalanceGameWindow -
                     stakeAmountGameWindow * numberOfSpins +
                     totalWinAmountGameWindow
-                ).toFixed(2)
             );
 
             expect(endBalanceConsoleCalculated).toEqual(
@@ -118,7 +113,9 @@ readGames().forEach((game) => {
 
             expect(endBalanceConsoleCalculated).toEqual(endBalanceConsole);
 
-            expect(endBalanceGameWindowCalculated).toEqual(endBalanceGameWindow);
+            expect(endBalanceGameWindowCalculated).toEqual(
+                endBalanceGameWindow
+            );
 
             expect(endBalanceGameWindowCalculated).toEqual(
                 endBalanceConsoleCalculated
@@ -137,14 +134,14 @@ readGames().forEach((game) => {
                 ExpectedMessage.BALANCE_UPDATE
             );
 
-            const startBalanceGameWindow = await getBalanceGameWindow(page)
+            const startBalanceGameWindow = await getBalanceGameWindow(page);
 
             const stakeAmountConsole = await getValueFromConsoleMessages(
                 consoleMessages,
                 ExpectedMessage.STAKE_UPDATE
             );
 
-            const stakeAmountGameWindow = await getStakeAmountGameWindow(page)
+            const stakeAmountGameWindow = await getStakeAmountGameWindow(page);
 
             await firstSpin(page, consoleMessages);
             numberOfSpins++;
@@ -153,7 +150,7 @@ readGames().forEach((game) => {
                 consoleMessages,
                 ExpectedMessage.WIN_UPDATE
             );
-            let winAmountGameWindow = await getWinAmountGameWindow(page)
+            let winAmountGameWindow = await getWinAmountGameWindow(page);
 
             while (winAmountConsole === 0 && winAmountGameWindow === 0) {
                 await spin(page, consoleMessages);
@@ -164,8 +161,7 @@ readGames().forEach((game) => {
                     ExpectedMessage.WIN_UPDATE
                 );
 
-                winAmountGameWindow = await getWinAmountGameWindow(page)
-                
+                winAmountGameWindow = await getWinAmountGameWindow(page);
             }
 
             const endBalanceConsole = await getValueFromConsoleMessages(
@@ -173,36 +169,34 @@ readGames().forEach((game) => {
                 ExpectedMessage.BALANCE_UPDATE
             );
 
-            const endBalanceGameWindow = await getBalanceGameWindow(page)
+            const endBalanceGameWindow = await getBalanceGameWindow(page);
 
-            const endBalanceConsoleCalculated = Number(
-                (
-                    startBalanceConsole -
+            const endBalanceConsoleCalculated = numberToTwoDecimalPlaces(
+                startBalanceConsole -
                     stakeAmountConsole * numberOfSpins +
                     winAmountConsole
-                ).toFixed(2)
             );
 
-            const endBalanceGameWindowCalculated = Number(
-                (
-                    startBalanceGameWindow -
+            const endBalanceGameWindowCalculated = numberToTwoDecimalPlaces(
+                startBalanceGameWindow -
                     stakeAmountGameWindow * numberOfSpins +
                     winAmountGameWindow
-                ).toFixed(2)
             );
 
-            const endWinLossAmountConsole = Number(
-                (winAmountConsole - stakeAmountConsole * numberOfSpins).toFixed(
-                    2
-                )
+            const endWinLossAmountConsole = numberToTwoDecimalPlaces(
+                winAmountConsole - stakeAmountConsole * numberOfSpins
             );
-            const endWinLossAmountGameWindow = await getWinLossAmountGameWindow(page)
+
+            const endWinLossAmountGameWindow =
+                await getWinLossAmountGameWindow(page);
 
             expect(endWinLossAmountConsole).toEqual(endWinLossAmountGameWindow);
 
             expect(endBalanceConsoleCalculated).toEqual(endBalanceConsole);
 
-            expect(endBalanceGameWindowCalculated).toEqual(endBalanceGameWindow);
+            expect(endBalanceGameWindowCalculated).toEqual(
+                endBalanceGameWindow
+            );
 
             expect(endBalanceGameWindowCalculated).toEqual(
                 endBalanceConsoleCalculated

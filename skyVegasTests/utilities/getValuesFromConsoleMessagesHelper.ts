@@ -1,21 +1,8 @@
-import { messageExists } from './messageExistsHelper';
 import {
-    deletePreviousConsoleMessages,
     validateConsoleMessages,
-} from './validateConsoleMessagesHelper';
-
-export const currencyStringToNumber = (
-    currencyString: string | null | undefined
-): number => {
-    if (!currencyString) {
-        return 0;
-    }
-    // Remove any non-digit characters except for the decimal point
-    const cleanedString = currencyString.replace(/[^\d.-]/g, '');
-    // Convert the cleaned string to a number
-    const numberValue = parseFloat(cleanedString);
-    return Number(numberValue.toFixed(2));
-};
+    numberToTwoDecimalPlaces,
+    deletePreviousConsoleMessages,
+} from '.';
 
 export const getValueFromConsoleMessages = async (
     consoleMessages: string[],
@@ -25,14 +12,11 @@ export const getValueFromConsoleMessages = async (
     const valueMessage = consoleMessages.find((_) => _.includes(valueName));
 
     if (valueMessage) {
-        deletePreviousConsoleMessages(
-            consoleMessages,
-            messageExists(consoleMessages, valueName)
-        );
+        deletePreviousConsoleMessages(valueName, consoleMessages);
         const value: RegExpMatchArray | null =
             valueMessage.match(/(\d+(\.\d+)?)/);
         if (value) {
-            return Number(parseFloat(value[0]).toFixed(2));
+            return numberToTwoDecimalPlaces(parseFloat(value[0]));
         }
     }
 

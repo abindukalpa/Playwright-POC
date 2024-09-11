@@ -10,7 +10,6 @@ import {
 import { ExpectedMessage } from '../types/expectedMessage';
 
 let page: Page;
-
 readGames().forEach((game) => {
     test.describe(`Testing with text: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {

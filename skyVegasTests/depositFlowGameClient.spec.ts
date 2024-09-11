@@ -9,8 +9,8 @@ import {
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
 
+let page: Page;
 readGames().forEach((game) => {
-    let page: Page;
     test.describe(`Testing with text: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
