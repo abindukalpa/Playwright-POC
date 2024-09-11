@@ -5,9 +5,9 @@ import {
 } from './validateConsoleMessagesHelper';
 
 export const currencyStringToNumber = (
-    currencyString: string | null
+    currencyString: string | null | undefined
 ): number => {
-    if (currencyString == null) {
+    if (!currencyString) {
         return 0;
     }
     // Remove any non-digit characters except for the decimal point

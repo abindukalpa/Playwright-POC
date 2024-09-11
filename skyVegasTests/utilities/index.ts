@@ -8,3 +8,4 @@ export { makeDeposit } from './makeDepositHelper';
 export { readGames } from './readGamesHelper';
 export { getValueFromConsoleMessages } from './getValuesFromConsoleMessagesHelper';
 export { currencyStringToNumber } from './getValuesFromConsoleMessagesHelper';
+export { getBalanceGameWindow, getStakeAmountGameWindow, getWinAmountGameWindow, getWinLossAmountGameWindow   } from './getValuesFromPageHelper'
