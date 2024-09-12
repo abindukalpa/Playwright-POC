@@ -8,20 +8,20 @@ import {
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
 
+let page: Page;
 readGames().forEach((game) => {
-    const consoleMessages: string[] = [];
-    let page: Page;
     test.describe(`Testing with text: ${game}`, () => {
-        test.beforeAll(async ({ browser }) => {
+        test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
             await login(page);
         });
 
-        test.afterAll(async () => {
+        test.afterEach(async () => {
             await page.close();
         });
 
         test('Test game menu open', async () => {
+            const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
             await expect(
@@ -40,10 +40,13 @@ readGames().forEach((game) => {
         });
 
         test('Test help menu open', async () => {
+            const consoleMessages: string[] = [];
+            startEventListener(page, consoleMessages);
+            await launchGame(page, game, consoleMessages);
             await page
                 .frameLocator('#root iframe')
                 .getByRole('link', { name: 'Game Help' })
-                .waitFor();
+                .waitFor({ state: 'attached' });
             await page
                 .frameLocator('#root iframe')
                 .getByRole('link', { name: 'Game Help' })
@@ -55,6 +58,9 @@ readGames().forEach((game) => {
         });
 
         test('Test game menu closed', async () => {
+            const consoleMessages: string[] = [];
+            startEventListener(page, consoleMessages);
+            await launchGame(page, game, consoleMessages);
             await page
                 .frameLocator('#root iframe')
                 .getByText('MenuOpen the menu to access')
@@ -67,6 +73,9 @@ readGames().forEach((game) => {
         });
 
         test('Test paytable open', async () => {
+            const consoleMessages: string[] = [];
+            startEventListener(page, consoleMessages);
+            await launchGame(page, game, consoleMessages);
             await page
                 .frameLocator('#root iframe')
                 .getByRole('link', { name: 'Game Help' })

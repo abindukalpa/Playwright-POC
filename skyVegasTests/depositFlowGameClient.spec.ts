@@ -4,6 +4,7 @@ import {
     validateConsoleMessages,
     login,
     startEventListener,
+    makeDeposit,
     readGames,
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
@@ -20,12 +21,19 @@ readGames().forEach((game) => {
             await page.close();
         });
 
-        test('supportedCurrencies', async () => {
+        test('Test deposit flow', async ({ browser }) => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
+            await page
+                .frameLocator('#root iframe')
+                .getByRole('button', { name: 'Deposit' })
+                .click();
+
+            await makeDeposit(browser);
+            await page.frameLocator('#root iframe').locator('.sprite').click();
             await validateConsoleMessages(
-                ExpectedMessage.CURRENCY_GBP,
+                ExpectedMessage.DEPOSIT,
                 consoleMessages
             );
         });
