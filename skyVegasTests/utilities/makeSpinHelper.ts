@@ -17,6 +17,5 @@ export const firstSpin = async (page: Page, consoleMessages: string[]) => {
 export const spin = async (page: Page, consoleMessages: string[]) => {
     await page.keyboard.press(' ', { delay: 500 });
     await validateConsoleMessages(ExpectedMessage.END_SPIN, consoleMessages);
-
     deletePreviousConsoleMessages(ExpectedMessage.END_SPIN, consoleMessages);
 };

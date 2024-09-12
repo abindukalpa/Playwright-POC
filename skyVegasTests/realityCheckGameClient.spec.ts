@@ -5,7 +5,6 @@ import {
     login,
     startEventListener,
     firstSpin,
-    spin,
     readGames,
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
@@ -22,7 +21,7 @@ readGames().forEach((game) => {
             await page.close();
         });
 
-        test.skip('realityCheck', async () => {
+        test('realityCheck', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
 
@@ -31,16 +30,15 @@ readGames().forEach((game) => {
             await firstSpin(page, consoleMessages);
 
             // Wait 60s so the reality check timer kicks in
-            await page.waitForTimeout(60000);
+            await page.waitForTimeout(61000);
 
-            await spin(page, consoleMessages);
+            await page.keyboard.press(' ', { delay: 500 });
 
             await validateConsoleMessages(
                 ExpectedMessage.REALITY_CHECK,
                 consoleMessages,
-                true,
                 [65_000, 70_000, 75_000],
-                120_000
+                90_000
             );
         });
     });

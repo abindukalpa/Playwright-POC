@@ -20,70 +20,72 @@ readGames().forEach((game) => {
             await page.close();
         });
 
-        test('Test game menu open', async () => {
+        test('game help', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
+
             await expect(
                 page
                     .frameLocator('#root iframe')
-                    .getByText('MenuOpen the menu to access')
+                    .locator('.topbar-container span.btn-menu-hambg-icon')
             ).toBeAttached();
             await page
                 .frameLocator('#root iframe')
-                .getByText('MenuOpen the menu to access')
+                .locator('.topbar-container span.btn-menu-hambg-icon')
                 .click();
+
             await validateConsoleMessages(
-                ExpectedMessage.GAME_HELP_MENU_OPEN,
+                ExpectedMessage.GAME_MENU_OPEN,
                 consoleMessages
             );
-        });
 
-        test('Test help menu open', async () => {
-            const consoleMessages: string[] = [];
-            startEventListener(page, consoleMessages);
-            await launchGame(page, game, consoleMessages);
+            await expect(
+                page
+                    .frameLocator('#root iframe')
+                    .locator('.topbar-menu-wrapper li.menu-item.gamehelp')
+            ).toBeAttached();
             await page
                 .frameLocator('#root iframe')
-                .getByRole('link', { name: 'Game Help' })
-                .waitFor({ state: 'attached' });
-            await page
-                .frameLocator('#root iframe')
-                .getByRole('link', { name: 'Game Help' })
+                .locator('.topbar-menu-wrapper li.menu-item.gamehelp')
                 .click();
+
+            await validateConsoleMessages(
+                ExpectedMessage.GAME_MENU_CLOSE,
+                consoleMessages
+            );
+
             await validateConsoleMessages(
                 ExpectedMessage.GAME_HELP,
                 consoleMessages
             );
         });
 
-        test('Test game menu closed', async () => {
+        test('toggle paytable', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
+
+            await expect(
+                page
+                    .frameLocator('#root iframe')
+                    .locator('.topbar-container span.btn-menu-hambg-icon')
+            ).toBeAttached();
             await page
                 .frameLocator('#root iframe')
-                .getByText('MenuOpen the menu to access')
+                .locator('.topbar-container span.btn-menu-hambg-icon')
                 .click();
 
-            await validateConsoleMessages(
-                ExpectedMessage.GAME_HELP_MENU_CLOSE,
-                consoleMessages
-            );
-        });
-
-        test('Test paytable open', async () => {
-            const consoleMessages: string[] = [];
-            startEventListener(page, consoleMessages);
-            await launchGame(page, game, consoleMessages);
+            await expect(
+                page
+                    .frameLocator('#root iframe')
+                    .locator('.topbar-menu-wrapper li.menu-item.paytable')
+            ).toBeAttached();
             await page
                 .frameLocator('#root iframe')
-                .getByRole('link', { name: 'Game Help' })
-                .waitFor();
-            await page
-                .frameLocator('#root iframe')
-                .getByRole('link', { name: 'Paytable' })
+                .locator('.topbar-menu-wrapper li.menu-item.paytable')
                 .click();
+
             await validateConsoleMessages(
                 ExpectedMessage.PAY_TABLE,
                 consoleMessages
