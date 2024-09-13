@@ -26,7 +26,7 @@ $(INSTALL_STAMP): package.json package-lock.json
 	touch $(INSTALL_STAMP)
 
 lint:
-	npx eslint --fix
+	npm run lint
 
 format: install
 	npm run format
