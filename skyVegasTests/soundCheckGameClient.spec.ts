@@ -5,6 +5,7 @@ import {
     login,
     startEventListener,
     readGames,
+    deletePreviousConsoleMessages,
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
 
@@ -38,27 +39,30 @@ readGames().forEach((game) => {
                 //If sound is on, turn it off
                 await soundToggleIcon.click();
             }
-            await soundToggleIcon.click();
+            consoleMessages.length = 0;
 
-            expect(
-                (await soundToggleIcon.getAttribute('class'))?.includes(
-                    ICON_MUTED_CLASS
-                )
-            ).toBeFalsy;
+            // turn sound on
+            await soundToggleIcon.click();
+            expect(await soundToggleIcon.getAttribute('class')).not.toContain(
+                ICON_MUTED_CLASS
+            );
             await validateConsoleMessages(
                 ExpectedMessage.SOUND_CHECK_GAME_ON,
-                consoleMessages,
-                true
+                consoleMessages
+            );
+            deletePreviousConsoleMessages(
+                ExpectedMessage.SOUND_CHECK_GAME_ON,
+                consoleMessages
             );
 
+            // turn sound off
             await soundToggleIcon.click();
             expect(await soundToggleIcon.getAttribute('class')).toContain(
                 ICON_MUTED_CLASS
             );
             await validateConsoleMessages(
                 ExpectedMessage.SOUND_CHECK_GAME_OFF,
-                consoleMessages,
-                true
+                consoleMessages
             );
         });
     });
