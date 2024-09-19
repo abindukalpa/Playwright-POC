@@ -8,13 +8,18 @@ import {
     readGames,
 } from './utilities';
 import { ExpectedMessage } from '../types/expectedMessage';
+import { config } from '../config/config';
 
 let page: Page;
 readGames().forEach((game) => {
     test.describe(`Testing with text: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
-            await login(page);
+            await login(
+                page,
+                config.getRealityCheckUserName(),
+                config.getRealityCheckPassword()
+            );
         });
 
         test.afterEach(async () => {

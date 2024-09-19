@@ -5,6 +5,8 @@ export class Config {
     #accountID = String(process.env.ACCOUNTID);
     #userName = String(process.env.USERNAME);
     #password = String(process.env.PASSWORD);
+    #realityCheckUserName = String(process.env.REALITY_CHECK_USERNAME);
+    #realityCheckPassword = String(process.env.REALITY_CHECK_PASSWORD);
     #url: string = process.env.URL
         ? String(process.env.URL)
         : 'https://skyvegas.com.nxt.ppbdev.com';
@@ -28,6 +30,13 @@ export class Config {
     public getURL(): string {
         return this.#url;
     }
-}
 
+    public getRealityCheckUserName(): string {
+        return this.#realityCheckUserName;
+    }
+
+    public getRealityCheckPassword(): string {
+        return this.#realityCheckPassword;
+    }
+}
 export const config = new Config();
