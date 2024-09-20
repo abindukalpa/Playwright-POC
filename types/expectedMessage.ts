@@ -12,6 +12,8 @@ export enum ExpectedMessage {
     GAME_LOAD_COMPLETE = 'gameLoadComplete',
     PAY_TABLE = 'toggle paytable',
     PLAY_MODE_UPDATE = 'playModeUpdate',
+    FREE_SPIN_PLAY_MODE_UPDATE = 'freeSpin',
+    NORMAL_PLAY_MODE_UPDATE = 'normal',
     REALITY_CHECK = 'REALITY_CHECK_ELAPSED_ERROR',
     SOUND_CHECK_GAME_OFF = '"settingName":"sound","settingValue":"off"',
     SOUND_CHECK_GAME_ON = '"settingName":"sound","settingValue":"on"',

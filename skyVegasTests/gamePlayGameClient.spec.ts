@@ -3,7 +3,6 @@ import {
     launchGame,
     login,
     startEventListener,
-    firstSpin,
     readGames,
     spin,
     getValueFromConsoleMessages,
@@ -49,7 +48,7 @@ readGames().forEach((game) => {
 
             const stakeAmountGameWindow = await getStakeAmountGameWindow(page);
 
-            await firstSpin(page, consoleMessages);
+            await spin(page, consoleMessages);
             numberOfSpins++;
 
             let totalWinAmountConsole = 0;
@@ -143,7 +142,7 @@ readGames().forEach((game) => {
 
             const stakeAmountGameWindow = await getStakeAmountGameWindow(page);
 
-            await firstSpin(page, consoleMessages);
+            await spin(page, consoleMessages);
             numberOfSpins++;
 
             let winAmountConsole = await getValueFromConsoleMessages(

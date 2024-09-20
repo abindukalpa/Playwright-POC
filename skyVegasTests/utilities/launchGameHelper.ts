@@ -1,7 +1,7 @@
 import { expect, type Page } from '@playwright/test';
 
-import { validateConsoleMessages } from './validateConsoleMessagesHelper';
 import { ExpectedMessage } from '../../types/expectedMessage';
+import { validateConsoleMessages, recoverFromFreeSpins } from '.';
 
 export const launchGame = async (
     page: Page,
@@ -36,6 +36,24 @@ export const launchGame = async (
 
     await validateConsoleMessages(
         ExpectedMessage.GAME_LOAD_COMPLETE,
+        consoleMessages
+    );
+
+    await getPastGameSplashMenu(page, consoleMessages);
+
+    await recoverFromFreeSpins(page, consoleMessages);
+};
+
+export const getPastGameSplashMenu = async (
+    page: Page,
+    consoleMessages: string[]
+) => {
+    await page.mouse.click(300, 300);
+
+    await page.keyboard.press(' ', { delay: 500 });
+
+    await validateConsoleMessages(
+        ExpectedMessage.PLAY_MODE_UPDATE,
         consoleMessages
     );
 };
