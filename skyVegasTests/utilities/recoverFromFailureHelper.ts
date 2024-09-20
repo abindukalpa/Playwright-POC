@@ -14,8 +14,6 @@ export const recoverFromFreeSpins = async (
     );
 
     if (isFreeSpinModeOn) {
-        // click on the canvas to start the free spins, they will start auto-playing
-        // sometimes there are multiple rounds so the test will need to click again to start the next round, this will be done upon test retry
         await expect(async (): Promise<void> => {
             await page.mouse.click(300, 300);
             expect(
