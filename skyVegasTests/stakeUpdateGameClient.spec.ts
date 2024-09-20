@@ -36,8 +36,6 @@ readGames().forEach((game) => {
 
             await page.mouse.click(300, 300, { delay: 10 });
 
-            await page.keyboard.press('Enter', { delay: 500 });
-
             await page.keyboard.press('ArrowRight', { delay: 500 });
 
             await expect(async () => {
@@ -83,8 +81,6 @@ readGames().forEach((game) => {
 
             await page.mouse.click(300, 300, { delay: 10 });
 
-            await page.keyboard.press('Enter', { delay: 500 });
-
             await page.keyboard.press('ArrowRight', { delay: 500 });
 
             await page.keyboard.press('ArrowLeft', { delay: 500 });
@@ -125,8 +121,6 @@ readGames().forEach((game) => {
             await launchGame(page, game, consoleMessages);
 
             await page.mouse.click(300, 300, { delay: 10 });
-
-            await page.keyboard.press('Enter', { delay: 500 });
 
             for (let i = 0; i < 150; i++) {
                 await page.keyboard.press('ArrowRight', { delay: 50 });
