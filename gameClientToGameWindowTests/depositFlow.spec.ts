@@ -6,12 +6,12 @@ import {
     startEventListener,
     makeDeposit,
     readGames,
-} from './utilities';
+} from './helpers';
 import { ExpectedMessage } from '../types/expectedMessage';
 
 let page: Page;
-readGames().forEach((game) => {
-    test.describe(`Testing with text: ${game}`, () => {
+readGames().forEach((game: string) => {
+    test.describe(`Testing with game: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
             await login(page);
@@ -21,7 +21,7 @@ readGames().forEach((game) => {
             await page.close();
         });
 
-        test('Test deposit flow', async ({ browser }) => {
+        test('deposit flow', async ({ browser }) => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);

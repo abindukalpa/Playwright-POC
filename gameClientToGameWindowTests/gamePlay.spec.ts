@@ -11,12 +11,12 @@ import {
     getWinAmountGameWindow,
     getWinLossAmountGameWindow,
     numberToTwoDecimalPlaces,
-} from './utilities';
+} from './helpers';
 import { ExpectedMessage } from '../types/expectedMessage';
 
 let page: Page;
-readGames().forEach((game) => {
-    test.describe(`Testing with text: ${game}`, () => {
+readGames().forEach((game: string) => {
+    test.describe(`Testing with game: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
             test.setTimeout(300000);
             page = await browser.newPage();
@@ -27,7 +27,7 @@ readGames().forEach((game) => {
             await page.close();
         });
 
-        test('gamePlayForLoss', async () => {
+        test('game play for loss scenario', async () => {
             const consoleMessages: string[] = [];
             let numberOfSpins = 0;
             startEventListener(page, consoleMessages);
@@ -121,7 +121,7 @@ readGames().forEach((game) => {
             );
         });
 
-        test('gamePlayForWin', async () => {
+        test('game play for win scenario', async () => {
             const consoleMessages: string[] = [];
             let numberOfSpins = 0;
             startEventListener(page, consoleMessages);
