@@ -6,12 +6,12 @@ import {
     readGames,
     getValueFromConsoleMessages,
     getStakeAmountGameWindow,
-} from './utilities';
+} from './helpers';
 import { ExpectedMessage } from '../types/expectedMessage';
 
 let page: Page;
-readGames().forEach((game) => {
-    test.describe(`Testing with text: ${game}`, async () => {
+readGames().forEach((game: string) => {
+    test.describe(`Testing with game: ${game}`, async () => {
         test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
             await login(page);
@@ -21,7 +21,7 @@ readGames().forEach((game) => {
             await page.close();
         });
 
-        test('stakeUpdateIncrease', async () => {
+        test('increase stake', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
 
@@ -66,7 +66,7 @@ readGames().forEach((game) => {
             }).toPass();
         });
 
-        test('stakeUpdateDecrease', async () => {
+        test('decrease stake', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
 
@@ -114,7 +114,7 @@ readGames().forEach((game) => {
             }).toPass();
         });
 
-        test('stakeMaxLimit', async () => {
+        test('max stake', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
 

@@ -6,15 +6,16 @@ import {
     startEventListener,
     makeDeposit,
     readGames,
-} from './utilities';
+    spin,
+} from './helpers';
 import { ExpectedMessage } from '../types/expectedMessage';
+import { config } from '../config/config';
 
 let page: Page;
-readGames().forEach((game) => {
-    test.describe(`Testing with text: ${game}`, () => {
+readGames().forEach((game: string) => {
+    test.describe(`Testing with game: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
-            await login(page);
         });
 
         test.afterEach(async () => {
@@ -22,6 +23,7 @@ readGames().forEach((game) => {
         });
 
         test('error message', async ({ browser }) => {
+            await login(page);
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
@@ -41,6 +43,33 @@ readGames().forEach((game) => {
             await validateConsoleMessages(
                 ExpectedMessage.ERROR_DISMISSED,
                 consoleMessages
+            );
+        });
+
+        test('reality check', async () => {
+            await login(
+                page,
+                config.getRealityCheckUserName(),
+                config.getRealityCheckPassword()
+            );
+
+            const consoleMessages: string[] = [];
+            startEventListener(page, consoleMessages);
+
+            await launchGame(page, game, consoleMessages);
+
+            await spin(page, consoleMessages);
+
+            // Wait 61s so the reality check timer kicks in
+            await page.waitForTimeout(61000);
+
+            await page.keyboard.press(' ', { delay: 500 });
+
+            await validateConsoleMessages(
+                ExpectedMessage.REALITY_CHECK,
+                consoleMessages,
+                [65_000, 70_000, 75_000],
+                90_000
             );
         });
     });

@@ -5,12 +5,12 @@ import {
     login,
     startEventListener,
     readGames,
-} from './utilities';
+} from './helpers';
 import { ExpectedMessage } from '../types/expectedMessage';
 
 let page: Page;
-readGames().forEach((game) => {
-    test.describe(`Testing with text: ${game}`, () => {
+readGames().forEach((game: string) => {
+    test.describe(`Testing with game: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
             await login(page);
