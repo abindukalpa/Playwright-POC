@@ -9,7 +9,7 @@ export {
     messageExists,
     getIndexOfExpectedMessage,
 } from './messageExistsHelper';
-export { firstSpin, spin } from './makeSpinHelper';
+export { spin } from './makeSpinHelper';
 export { makeDeposit } from './makeDepositHelper';
 export { readGames } from './readGamesHelper';
 export { getValueFromConsoleMessages } from './getValuesFromConsoleMessagesHelper';

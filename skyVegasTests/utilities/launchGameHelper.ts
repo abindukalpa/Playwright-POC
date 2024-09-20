@@ -39,5 +39,22 @@ export const launchGame = async (
         consoleMessages
     );
 
+    await getPastGameSplashMenu(page, consoleMessages);
+    //get round the menu here -> then you realise if you're in normal game mode or not
+
     await recoverFromFreeSpins(page, consoleMessages);
+};
+
+export const getPastGameSplashMenu = async (
+    page: Page,
+    consoleMessages: string[]
+) => {
+    await page.mouse.click(300, 300);
+
+    await page.keyboard.press(' ', { delay: 500 });
+
+    await validateConsoleMessages(
+        ExpectedMessage.PLAY_MODE_UPDATE,
+        consoleMessages
+    );
 };
