@@ -23,3 +23,4 @@ export {
     getWinAmountGameWindow,
     getWinLossAmountGameWindow,
 } from './getValuesFromPageHelper';
+export { recoverFromFreeSpins } from './recoverFromFailureHelper';

@@ -1,7 +1,7 @@
 import { expect, type Page } from '@playwright/test';
 
-import { validateConsoleMessages } from './validateConsoleMessagesHelper';
 import { ExpectedMessage } from '../../types/expectedMessage';
+import { validateConsoleMessages, recoverFromFreeSpins } from '.';
 
 export const launchGame = async (
     page: Page,
@@ -38,4 +38,6 @@ export const launchGame = async (
         ExpectedMessage.GAME_LOAD_COMPLETE,
         consoleMessages
     );
+
+    await recoverFromFreeSpins(page, consoleMessages);
 };
