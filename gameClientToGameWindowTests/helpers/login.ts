@@ -1,11 +1,9 @@
 import { type Page } from '@playwright/test';
 import { config } from '../../config/config';
 
-export const login = async (
-    page: Page,
-    username: string = config.getUserName(),
-    password: string = config.getPassword()
-) => {
+export const login = async (page: Page, username: string, password: string) => {
+    console.log('Username: ' + username);
+    console.log('Password: ' + password);
     await page.goto(config.getURL());
     await page.getByRole('link', { name: 'Log In' }).click();
     await page.getByLabel('Username').fill(username);

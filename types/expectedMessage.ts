@@ -13,6 +13,7 @@ export enum ExpectedMessage {
     PAY_TABLE = 'toggle paytable',
     PLAY_MODE_UPDATE = 'playModeUpdate',
     FREE_SPIN_PLAY_MODE_UPDATE = 'freeSpin',
+    BONUS_ROUND_MODE_UPDATE = 'bonusRound',
     NORMAL_PLAY_MODE_UPDATE = 'normal',
     REALITY_CHECK = 'REALITY_CHECK_ELAPSED_ERROR',
     SOUND_CHECK_GAME_OFF = '"settingName":"sound","settingValue":"off"',

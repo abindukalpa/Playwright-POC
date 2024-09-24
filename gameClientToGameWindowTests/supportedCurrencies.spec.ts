@@ -6,14 +6,17 @@ import {
     startEventListener,
     readGames,
 } from './helpers';
-import { ExpectedMessage } from '../types/expectedMessage';
+import { Account, ExpectedMessage } from '../types';
+import { config } from '../config/config';
 
 let page: Page;
 readGames().forEach((game: string) => {
     test.describe(`Testing with game: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
+            const workerNumber = test.info().parallelIndex;
+            const account: Account = config.getAccounts()[workerNumber];
             page = await browser.newPage();
-            await login(page);
+            await login(page, account.username, account.password);
         });
 
         test.afterEach(async () => {

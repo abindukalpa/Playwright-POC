@@ -1,30 +1,62 @@
+import { Account } from '../types/userAccount';
+
 export class Config {
     #nodeEnv: string = process.env.NODE_ENV
         ? String(process.env.NODE_ENV)
-        : 'dev';
-    #accountID = String(process.env.ACCOUNTID);
-    #userName = String(process.env.USERNAME);
-    #password = String(process.env.PASSWORD);
+        : 'nxt';
+
+    #workers: number = process.env.WORKERS ? Number(process.env.WORKERS) : 1;
+
+    #accounts: Account[] = this.createAccountsList();
+
     #realityCheckUserName = String(process.env.REALITY_CHECK_USERNAME);
     #realityCheckPassword = String(process.env.REALITY_CHECK_PASSWORD);
+
     #url: string = process.env.URL
         ? String(process.env.URL)
         : 'https://skyvegas.com.nxt.ppbdev.com';
+
+    #userCreationToolURL: string = process.env.USER_CREATION_TOOL_URL
+        ? String(process.env.USER_CREATION_TOOL_URL)
+        : 'https://uct.dev.betfair';
+
+    private createAccountsList(): Account[] {
+        const accounts: Account[] = [];
+        const usernames = String(process.env.USERNAMES).split(',');
+        const passwords = String(process.env.PASSWORDS).split(',');
+        const accountIds = String(process.env.ACCOUNT_IDS).split(',');
+
+        if (
+            usernames.length != this.#workers ||
+            passwords.length != this.#workers ||
+            accountIds.length != this.#workers
+        ) {
+            throw Error(
+                'Accounts defined incorrectly or number or workers is different than number of accounts defined'
+            );
+        }
+
+        for (let i = 0; i < this.#workers; i++) {
+            accounts.push({
+                username: usernames[i],
+                password: passwords[i],
+                accountId: accountIds[i],
+            });
+        }
+
+        return accounts;
+    }
+
+    public getAccounts(): Account[] {
+        return this.#accounts;
+    }
 
     public getNodeEnv(): string {
         return this.#nodeEnv;
     }
 
-    public getAccountID(): string {
-        return this.#accountID;
-    }
-
-    public getUserName(): string {
-        return this.#userName;
-    }
-
-    public getPassword(): string {
-        return this.#password;
+    public getUserCreationToolURL(): string {
+        return this.#userCreationToolURL;
     }
 
     public getURL(): string {

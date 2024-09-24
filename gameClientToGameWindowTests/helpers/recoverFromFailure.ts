@@ -1,6 +1,6 @@
 import { Page, expect } from '@playwright/test';
 import { messageExists } from '.';
-import { ExpectedMessage } from '../../types/expectedMessage';
+import { ExpectedMessage } from '../../types';
 
 export const recoverFromFreeSpins = async (
     page: Page,
@@ -13,9 +13,15 @@ export const recoverFromFreeSpins = async (
         _.includes(ExpectedMessage.FREE_SPIN_PLAY_MODE_UPDATE)
     );
 
-    if (isFreeSpinModeOn) {
+    const isBonusRound: boolean = playModeUpdateConsoleMessages.some((_) =>
+        _.includes(ExpectedMessage.BONUS_ROUND_MODE_UPDATE)
+    );
+
+    if (isFreeSpinModeOn || isBonusRound) {
         await expect(async (): Promise<void> => {
-            await page.mouse.click(300, 300);
+            await page.mouse.click(300, 300, { delay: 200 });
+            await page.keyboard.press(' ', { delay: 200 });
+
             expect(
                 messageExists(
                     consoleMessages,
@@ -24,7 +30,7 @@ export const recoverFromFreeSpins = async (
                 `Expected message ${ExpectedMessage.NORMAL_PLAY_MODE_UPDATE} was not found in the console messages`
             ).toBeTruthy();
         }).toPass({
-            intervals: [10_000, 20_000, 30_000, 45_000],
+            intervals: [10_000, 30_000, 45_000],
             timeout: 60_000,
         });
     }

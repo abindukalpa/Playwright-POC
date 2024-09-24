@@ -1,6 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 
-import { ExpectedMessage } from '../../types/expectedMessage';
+import { ExpectedMessage } from '../../types';
 import { validateConsoleMessages, recoverFromFreeSpins } from '.';
 
 export const launchGame = async (
@@ -28,7 +28,7 @@ export const launchGame = async (
                 '.search-box .game-tile-from-search-component .tile-container'
             )
             .first()
-    ).toBeAttached();
+    ).toBeAttached({ timeout: 15_000 });
     await page
         .locator('.search-box .game-tile-from-search-component .tile-container')
         .first()
@@ -48,9 +48,9 @@ export const getPastGameSplashMenu = async (
     page: Page,
     consoleMessages: string[]
 ) => {
-    await page.mouse.click(300, 300);
+    await page.mouse.click(300, 300, { delay: 200 });
 
-    await page.keyboard.press(' ', { delay: 500 });
+    await page.keyboard.press(' ', { delay: 200 });
 
     await validateConsoleMessages(
         ExpectedMessage.PLAY_MODE_UPDATE,

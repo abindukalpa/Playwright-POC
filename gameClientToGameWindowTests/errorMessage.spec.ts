@@ -8,7 +8,7 @@ import {
     readGames,
     spin,
 } from './helpers';
-import { ExpectedMessage } from '../types/expectedMessage';
+import { ExpectedMessage, Account } from '../types';
 import { config } from '../config/config';
 
 let page: Page;
@@ -23,7 +23,10 @@ readGames().forEach((game: string) => {
         });
 
         test('error message', async ({ browser }) => {
-            await login(page);
+            const workerNumber = test.info().parallelIndex;
+            const account: Account = config.getAccounts()[workerNumber];
+            await login(page, account.username, account.password);
+
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
             await launchGame(page, game, consoleMessages);
@@ -33,7 +36,7 @@ readGames().forEach((game: string) => {
                 .getByRole('button', { name: 'Deposit' })
                 .click();
 
-            await makeDeposit(browser);
+            await makeDeposit(browser, account.accountId);
             await page.frameLocator('#root iframe').locator('.sprite').click();
             await validateConsoleMessages(
                 ExpectedMessage.ERROR_DISPLAYED,
@@ -47,6 +50,8 @@ readGames().forEach((game: string) => {
         });
 
         test('reality check', async () => {
+            // set a 3 minute timeout for this test
+            test.setTimeout(300000);
             await login(
                 page,
                 config.getRealityCheckUserName(),
@@ -60,16 +65,14 @@ readGames().forEach((game: string) => {
 
             await spin(page, consoleMessages);
 
-            // Wait 61s so the reality check timer kicks in
-            await page.waitForTimeout(61000);
+            // Wait 121s so the reality check timer kicks in
+            await page.waitForTimeout(121000);
 
             await page.keyboard.press(' ', { delay: 500 });
 
             await validateConsoleMessages(
                 ExpectedMessage.REALITY_CHECK,
-                consoleMessages,
-                [65_000, 70_000, 75_000],
-                90_000
+                consoleMessages
             );
         });
     });
