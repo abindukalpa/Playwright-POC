@@ -28,7 +28,7 @@ export const launchGame = async (
                 '.search-box .game-tile-from-search-component .tile-container'
             )
             .first()
-    ).toBeAttached({ timeout: 15_000 });
+    ).toBeAttached();
     await page
         .locator('.search-box .game-tile-from-search-component .tile-container')
         .first()

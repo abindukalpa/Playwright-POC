@@ -12,6 +12,7 @@ import { ExpectedMessage, Account } from '../types';
 import { config } from '../config/config';
 
 let page: Page;
+const accounts: Account[] = config.getAccounts();
 readGames().forEach((game: string) => {
     test.describe(`Testing with game: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
@@ -24,7 +25,7 @@ readGames().forEach((game: string) => {
 
         test('error message', async ({ browser }) => {
             const workerNumber = test.info().parallelIndex;
-            const account: Account = config.getAccounts()[workerNumber];
+            const account: Account = accounts[workerNumber];
             await login(page, account.username, account.password);
 
             const consoleMessages: string[] = [];

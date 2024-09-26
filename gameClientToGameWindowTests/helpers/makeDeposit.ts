@@ -2,7 +2,6 @@ import { Browser } from '@playwright/test';
 import { config } from '../../config/config';
 
 export const makeDeposit = async (browser: Browser, accountId: string) => {
-    console.log('AccountId: ' + accountId);
     const userCreationPage = await browser.newPage();
     await userCreationPage.goto(config.getUserCreationToolURL());
     await userCreationPage.getByRole('link', { name: 'Make Deposit' }).click();
