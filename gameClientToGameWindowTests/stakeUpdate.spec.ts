@@ -11,11 +11,12 @@ import { Account, ExpectedMessage } from '../types';
 import { config } from '../config/config';
 
 let page: Page;
+const accounts: Account[] = config.getAccounts();
 readGames().forEach((game: string) => {
     test.describe(`Testing with game: ${game}`, async () => {
         test.beforeEach(async ({ browser }) => {
             const workerNumber = test.info().parallelIndex;
-            const account: Account = config.getAccounts()[workerNumber];
+            const account: Account = accounts[workerNumber];
             page = await browser.newPage();
             await login(page, account.username, account.password);
         });
@@ -68,7 +69,7 @@ readGames().forEach((game: string) => {
                     stakeUpdateConsoleStart
                 );
                 expect(stakeAmountGameWindowEnd).toEqual(stakeUpdateConsoleEnd);
-            }).toPass({ intervals: [2_000, 5_000, 10_000] });
+            }).toPass({ intervals: [1_000, 5_000, 10_000], timeout: 60_000 });
         });
 
         test('decrease stake', async () => {
@@ -118,7 +119,7 @@ readGames().forEach((game: string) => {
                 );
 
                 expect(stakeAmountGameWindowEnd).toEqual(stakeUpdateConsoleEnd);
-            }).toPass({ intervals: [2_000, 5_000, 10_000] });
+            }).toPass({ intervals: [1_000, 5_000, 10_000], timeout: 60_000 });
         });
 
         test('max stake', async () => {
@@ -152,7 +153,7 @@ readGames().forEach((game: string) => {
 
                 expect(stakeUpdateConsoleEnd).toBeLessThanOrEqual(10);
                 expect(stakeAmountGameWindowEnd).toBeLessThanOrEqual(10);
-            }).toPass({ intervals: [2_000, 5_000, 10_000] });
+            }).toPass({ intervals: [1_000, 5_000, 10_000], timeout: 60_000 });
         });
     });
 });

@@ -6,18 +6,15 @@ export const recoverFromFreeSpins = async (
     page: Page,
     consoleMessages: string[]
 ): Promise<void> => {
-    const playModeUpdateConsoleMessages: string[] = consoleMessages.filter(
-        (_) => _.includes(ExpectedMessage.PLAY_MODE_UPDATE)
-    );
-    const isFreeSpinModeOn: boolean = playModeUpdateConsoleMessages.some((_) =>
-        _.includes(ExpectedMessage.FREE_SPIN_PLAY_MODE_UPDATE)
-    );
-
-    const isBonusRound: boolean = playModeUpdateConsoleMessages.some((_) =>
-        _.includes(ExpectedMessage.BONUS_ROUND_MODE_UPDATE)
+    const shouldInitiateRecover: boolean = consoleMessages.some(
+        (_) =>
+            _.includes(ExpectedMessage.PLAYER_ATTENTION_REQUIRED) ||
+            _.includes(ExpectedMessage.BONUS_ROUND_MODE_UPDATE) ||
+            _.includes(ExpectedMessage.FREE_SPIN_PLAY_MODE_UPDATE)
     );
 
-    if (isFreeSpinModeOn || isBonusRound) {
+    if (shouldInitiateRecover) {
+        console.info('Attempting to recover from free spin or bonus round...');
         await expect(async (): Promise<void> => {
             await page.mouse.click(300, 300, { delay: 200 });
             await page.keyboard.press(' ', { delay: 200 });
@@ -30,7 +27,7 @@ export const recoverFromFreeSpins = async (
                 `Expected message ${ExpectedMessage.NORMAL_PLAY_MODE_UPDATE} was not found in the console messages`
             ).toBeTruthy();
         }).toPass({
-            intervals: [10_000, 30_000, 45_000],
+            intervals: [1_000, 5_000, 10_000],
             timeout: 60_000,
         });
     }

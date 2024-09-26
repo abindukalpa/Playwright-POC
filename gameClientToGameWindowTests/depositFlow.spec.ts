@@ -11,6 +11,7 @@ import { ExpectedMessage, Account } from '../types';
 import { config } from '../config/config';
 
 let page: Page;
+const accounts: Account[] = config.getAccounts();
 readGames().forEach((game: string) => {
     test.describe(`Testing with game: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
@@ -23,8 +24,7 @@ readGames().forEach((game: string) => {
 
         test('deposit flow', async ({ browser }) => {
             const workerNumber = test.info().parallelIndex;
-            const account: Account = config.getAccounts()[workerNumber];
-            console.log('account' + JSON.stringify(account));
+            const account: Account = accounts[workerNumber];
 
             await login(page, account.username, account.password);
 

@@ -11,7 +11,7 @@ export const validateConsoleMessages = async (
             `Expected message ${expectedMessage} was not found in the console messages`
         ).toBeTruthy();
     }).toPass({
-        intervals: [5_000, 10_000, 30_000],
+        intervals: [1_000, 5_000, 10_000],
         timeout: 60_000,
     });
 };

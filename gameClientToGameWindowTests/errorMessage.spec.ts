@@ -12,6 +12,7 @@ import { ExpectedMessage, Account } from '../types';
 import { config } from '../config/config';
 
 let page: Page;
+const accounts: Account[] = config.getAccounts();
 readGames().forEach((game: string) => {
     test.describe(`Testing with game: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
@@ -24,7 +25,7 @@ readGames().forEach((game: string) => {
 
         test('error message', async ({ browser }) => {
             const workerNumber = test.info().parallelIndex;
-            const account: Account = config.getAccounts()[workerNumber];
+            const account: Account = accounts[workerNumber];
             await login(page, account.username, account.password);
 
             const consoleMessages: string[] = [];
@@ -51,7 +52,7 @@ readGames().forEach((game: string) => {
 
         test('reality check', async () => {
             // set a 3 minute timeout for this test
-            test.setTimeout(300000);
+            test.setTimeout(300_000);
             await login(
                 page,
                 config.getRealityCheckUserName(),
@@ -66,7 +67,7 @@ readGames().forEach((game: string) => {
             await spin(page, consoleMessages);
 
             // Wait 121s so the reality check timer kicks in
-            await page.waitForTimeout(121000);
+            await page.waitForTimeout(121_000);
 
             await page.keyboard.press(' ', { delay: 500 });
 

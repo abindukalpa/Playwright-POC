@@ -16,7 +16,7 @@ export const launchGame = async (
         const numericValues = accountFundsInfo?.match(numberRegex);
         expect(numericValues?.length).toEqual(2); //expect 2 numbers Main and Bonus
     }).toPass({
-        intervals: [5_000, 10_000, 15_000],
+        intervals: [1_000, 5_000, 10_000],
         timeout: 60_000,
     });
 
@@ -39,9 +39,9 @@ export const launchGame = async (
         consoleMessages
     );
 
-    await getPastGameSplashMenu(page, consoleMessages);
-
     await recoverFromFreeSpins(page, consoleMessages);
+
+    await getPastGameSplashMenu(page, consoleMessages);
 };
 
 export const getPastGameSplashMenu = async (

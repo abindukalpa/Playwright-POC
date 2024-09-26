@@ -16,12 +16,13 @@ import { Account, ExpectedMessage } from '../types';
 import { config } from '../config/config';
 
 let page: Page;
+const accounts: Account[] = config.getAccounts();
 readGames().forEach((game: string) => {
     test.describe(`Testing with game: ${game}`, () => {
         test.beforeEach(async ({ browser }) => {
-            test.setTimeout(300000);
+            test.setTimeout(300_000);
             const workerNumber = test.info().parallelIndex;
-            const account: Account = config.getAccounts()[workerNumber];
+            const account: Account = accounts[workerNumber];
             page = await browser.newPage();
             await login(page, account.username, account.password);
         });
