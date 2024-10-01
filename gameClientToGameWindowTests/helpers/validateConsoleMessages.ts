@@ -3,9 +3,7 @@ import { messageExists, getIndexOfExpectedMessage } from '.';
 
 export const validateConsoleMessages = async (
     expectedMessage: string,
-    consoleMessages: string[],
-    intervals: number[] = [5_000, 10_000, 15_000, 20_000],
-    timeout = 60_000
+    consoleMessages: string[]
 ) => {
     await expect(async (): Promise<void> => {
         expect(
@@ -13,8 +11,8 @@ export const validateConsoleMessages = async (
             `Expected message ${expectedMessage} was not found in the console messages`
         ).toBeTruthy();
     }).toPass({
-        intervals: intervals,
-        timeout: timeout,
+        intervals: [1_000, 5_000, 10_000],
+        timeout: 60_000,
     });
 };
 

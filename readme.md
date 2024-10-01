@@ -7,8 +7,21 @@ Different environment variables could be created such as
 a. .env.nxt
 b. .env.live
 
-Since the default environment is dev per line 7 in playwright.config.ts, clicking on the play button via the extension will work in getting the dev parameters.
-For executing live execute `make`, `make test`, or `npm start`
+Running the test pack in parallel mode, the env vars needed:
+
+1. Set WORKERS=(number of workers you want)
+2. Set USERNAMES=(comma separated list with usernames) should equal the number of workers
+3. Set PASSWORDS=(comma separated list with passwords) should equal the number of workers
+4. Set ACCOUNT_IDS=(comma separated list with account ids) should equal the number of workers
+
+NOTE: The index of each username/password/account_id is used to create a list of users, so user credentials will get linked up using the index. So as an example:
+USERNAMES=asdf,zxcv
+PASSWORDS=123,789
+ACCOUNT_IDS=234,567
+
+Those will create 2 users.
+First user will have Username/Password/Account_ID: asdf/123/234
+Second user will have Username/Password/Account_ID: zxcv/789/567
 
 # Makefile Commands
 

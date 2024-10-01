@@ -1,15 +1,15 @@
 import { Browser } from '@playwright/test';
 import { config } from '../../config/config';
 
-export const makeDeposit = async (browser: Browser) => {
+export const makeDeposit = async (browser: Browser, accountId: string) => {
     const userCreationPage = await browser.newPage();
-    await userCreationPage.goto('https://uct.dev.betfair/');
+    await userCreationPage.goto(config.getUserCreationToolURL());
     await userCreationPage.getByRole('link', { name: 'Make Deposit' }).click();
     await userCreationPage.getByRole('combobox').selectOption('SKYBET');
     await userCreationPage
         .getByRole('row', { name: 'Account ID' })
         .getByRole('textbox')
-        .fill(config.getAccountID());
+        .fill(accountId);
     await userCreationPage
         .getByRole('row', { name: 'Amount' })
         .getByRole('textbox')

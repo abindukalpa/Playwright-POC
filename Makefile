@@ -12,7 +12,7 @@ endif
 # headless run
 test: install
 	@echo running tests in $(ENV) env
-	npx playwright test
+	npm start
 
 # run with browser open
 debug: install

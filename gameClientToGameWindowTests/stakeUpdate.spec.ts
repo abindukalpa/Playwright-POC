@@ -7,14 +7,18 @@ import {
     getValueFromConsoleMessages,
     getStakeAmountGameWindow,
 } from './helpers';
-import { ExpectedMessage } from '../types/expectedMessage';
+import { Account, ExpectedMessage } from '../types';
+import { config } from '../config/config';
 
 let page: Page;
+const accounts: Account[] = config.getAccounts();
 readGames().forEach((game: string) => {
     test.describe(`Testing with game: ${game}`, async () => {
         test.beforeEach(async ({ browser }) => {
+            const workerNumber = test.info().parallelIndex;
+            const account: Account = accounts[workerNumber];
             page = await browser.newPage();
-            await login(page);
+            await login(page, account.username, account.password);
         });
 
         test.afterEach(async () => {
@@ -34,22 +38,24 @@ readGames().forEach((game: string) => {
                 ExpectedMessage.STAKE_UPDATE
             );
 
-            await page.mouse.click(300, 300, { delay: 10 });
+            await page.mouse.click(300, 300, { delay: 1000 });
 
-            await page.keyboard.press('ArrowRight', { delay: 500 });
+            await page.keyboard.press('ArrowRight', { delay: 1000 });
 
             await expect(async () => {
-                const lastMessageFromConsoleMessages =
-                    consoleMessages[consoleMessages.length - 1];
-
-                expect(lastMessageFromConsoleMessages).toContain(
-                    ExpectedMessage.STAKE_UPDATE
+                const filteredStakeUpdateMessages = consoleMessages.filter(
+                    (_) => _.includes(ExpectedMessage.STAKE_UPDATE)
                 );
+
+                const lastStakeUpdateMessage =
+                    filteredStakeUpdateMessages[
+                        filteredStakeUpdateMessages.length - 1
+                    ];
 
                 const stakeAmountGameWindowEnd =
                     await getStakeAmountGameWindow(page);
                 const stakeUpdateConsoleEnd = await getValueFromConsoleMessages(
-                    [lastMessageFromConsoleMessages],
+                    [lastStakeUpdateMessage],
                     ExpectedMessage.STAKE_UPDATE
                 );
 
@@ -63,7 +69,7 @@ readGames().forEach((game: string) => {
                     stakeUpdateConsoleStart
                 );
                 expect(stakeAmountGameWindowEnd).toEqual(stakeUpdateConsoleEnd);
-            }).toPass();
+            }).toPass({ intervals: [1_000, 5_000, 10_000], timeout: 60_000 });
         });
 
         test('decrease stake', async () => {
@@ -81,22 +87,24 @@ readGames().forEach((game: string) => {
 
             await page.mouse.click(300, 300, { delay: 10 });
 
-            await page.keyboard.press('ArrowRight', { delay: 500 });
+            await page.keyboard.press('ArrowRight', { delay: 1000 });
 
-            await page.keyboard.press('ArrowLeft', { delay: 500 });
+            await page.keyboard.press('ArrowLeft', { delay: 1000 });
 
             await expect(async () => {
-                const lastMessageFromConsoleMessages =
-                    consoleMessages[consoleMessages.length - 1];
-
-                expect(lastMessageFromConsoleMessages).toContain(
-                    ExpectedMessage.STAKE_UPDATE
+                const filteredStakeUpdateMessages = consoleMessages.filter(
+                    (_) => _.includes(ExpectedMessage.STAKE_UPDATE)
                 );
+
+                const lastStakeUpdateMessage =
+                    filteredStakeUpdateMessages[
+                        filteredStakeUpdateMessages.length - 1
+                    ];
 
                 const stakeAmountGameWindowEnd =
                     await getStakeAmountGameWindow(page);
                 const stakeUpdateConsoleEnd = await getValueFromConsoleMessages(
-                    [lastMessageFromConsoleMessages],
+                    [lastStakeUpdateMessage],
                     ExpectedMessage.STAKE_UPDATE
                 );
 
@@ -111,7 +119,7 @@ readGames().forEach((game: string) => {
                 );
 
                 expect(stakeAmountGameWindowEnd).toEqual(stakeUpdateConsoleEnd);
-            }).toPass();
+            }).toPass({ intervals: [1_000, 5_000, 10_000], timeout: 60_000 });
         });
 
         test('max stake', async () => {
@@ -120,30 +128,32 @@ readGames().forEach((game: string) => {
 
             await launchGame(page, game, consoleMessages);
 
-            await page.mouse.click(300, 300, { delay: 10 });
+            await page.mouse.click(300, 300, { delay: 1000 });
 
             for (let i = 0; i < 150; i++) {
-                await page.keyboard.press('ArrowRight', { delay: 50 });
+                await page.keyboard.press('ArrowRight', { delay: 10 });
             }
 
             await expect(async () => {
-                const lastMessageFromConsoleMessages =
-                    consoleMessages[consoleMessages.length - 1];
-
-                expect(lastMessageFromConsoleMessages).toContain(
-                    ExpectedMessage.STAKE_UPDATE
+                const filteredStakeUpdateMessages = consoleMessages.filter(
+                    (_) => _.includes(ExpectedMessage.STAKE_UPDATE)
                 );
+
+                const lastStakeUpdateMessage =
+                    filteredStakeUpdateMessages[
+                        filteredStakeUpdateMessages.length - 1
+                    ];
 
                 const stakeAmountGameWindowEnd =
                     await getStakeAmountGameWindow(page);
                 const stakeUpdateConsoleEnd = await getValueFromConsoleMessages(
-                    [lastMessageFromConsoleMessages],
+                    [lastStakeUpdateMessage],
                     ExpectedMessage.STAKE_UPDATE
                 );
 
                 expect(stakeUpdateConsoleEnd).toBeLessThanOrEqual(10);
                 expect(stakeAmountGameWindowEnd).toBeLessThanOrEqual(10);
-            }).toPass();
+            }).toPass({ intervals: [1_000, 5_000, 10_000], timeout: 60_000 });
         });
     });
 });

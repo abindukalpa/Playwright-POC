@@ -1,6 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 
-import { ExpectedMessage } from '../../types/expectedMessage';
+import { ExpectedMessage } from '../../types';
 import { validateConsoleMessages, recoverFromFreeSpins } from '.';
 
 export const launchGame = async (
@@ -16,7 +16,7 @@ export const launchGame = async (
         const numericValues = accountFundsInfo?.match(numberRegex);
         expect(numericValues?.length).toEqual(2); //expect 2 numbers Main and Bonus
     }).toPass({
-        intervals: [5_000, 10_000, 15_000],
+        intervals: [1_000, 5_000, 10_000],
         timeout: 60_000,
     });
 
@@ -28,7 +28,7 @@ export const launchGame = async (
                 '.search-box .game-tile-from-search-component .tile-container'
             )
             .first()
-    ).toBeAttached();
+    ).toBeAttached({ timeout: 15_000 });
     await page
         .locator('.search-box .game-tile-from-search-component .tile-container')
         .first()
@@ -39,18 +39,18 @@ export const launchGame = async (
         consoleMessages
     );
 
-    await getPastGameSplashMenu(page, consoleMessages);
-
     await recoverFromFreeSpins(page, consoleMessages);
+
+    await getPastGameSplashMenu(page, consoleMessages);
 };
 
 export const getPastGameSplashMenu = async (
     page: Page,
     consoleMessages: string[]
 ) => {
-    await page.mouse.click(300, 300);
+    await page.mouse.click(300, 300, { delay: 200 });
 
-    await page.keyboard.press(' ', { delay: 500 });
+    await page.keyboard.press(' ', { delay: 200 });
 
     await validateConsoleMessages(
         ExpectedMessage.PLAY_MODE_UPDATE,
