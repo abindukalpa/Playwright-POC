@@ -1,1 +1,5 @@
-["Big bass splash", "big bass bonanza", "big bass hold and spinner"]
+{
+    "pragmatic": ["Big bass splash", "big bass bonanza", "big bass hold and spinner"],
+    "octoplay": ["lollicat"],
+    "relax": ["temple tumble"]
+}

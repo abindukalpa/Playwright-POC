@@ -6,6 +6,7 @@ export class Config {
         : 'nxt';
     #workers: number = process.env.WORKERS ? Number(process.env.WORKERS) : 1;
     #accounts: Account[] = this.createAccountsList();
+    #providers: string[] = this.createProvidersList();
     #realityCheckUserName = String(process.env.REALITY_CHECK_USERNAME);
     #realityCheckPassword = String(process.env.REALITY_CHECK_PASSWORD);
     #url: string = process.env.URL
@@ -30,6 +31,15 @@ export class Config {
         }
 
         return accounts;
+    }
+
+    private createProvidersList(): string[] {
+        const providerList = String(process.env.PROVIDERS);
+        return providerList.split(',');
+    }
+
+    public getProviders(): string[] {
+        return this.#providers;
     }
 
     public getAccounts(): Account[] {
