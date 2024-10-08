@@ -16,5 +16,11 @@ export const readGames = () => {
         return gamesList;
     }
 
-    return [];
+    for (const provider of providers) {
+        for (const game of games[provider]) {
+            gamesList.push({ name: game, provider });
+        }
+    }
+
+    return gamesList;
 };
