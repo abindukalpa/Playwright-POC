@@ -12,13 +12,13 @@ import {
     getWinLossAmountGameWindow,
     numberToTwoDecimalPlaces,
 } from './helpers';
-import { Account, ExpectedMessage } from '../types';
+import { Account, ExpectedMessage, Game } from '../types';
 import { config } from '../config/config';
 
 let page: Page;
 const accounts: Account[] = config.getAccounts();
-readGames().forEach((game: string) => {
-    test.describe(`Testing with game: ${game}`, () => {
+readGames().forEach((game: Game) => {
+    test.describe(`Testing with ${game.provider} game: ${game.name}`, () => {
         test.beforeEach(async ({ browser }) => {
             test.setTimeout(300_000);
             const workerNumber = test.info().parallelIndex;
@@ -36,7 +36,7 @@ readGames().forEach((game: string) => {
             let numberOfSpins = 0;
             startEventListener(page, consoleMessages);
 
-            await launchGame(page, game, consoleMessages);
+            await launchGame(page, game.name, consoleMessages);
 
             const startBalanceConsole = await getValueFromConsoleMessages(
                 consoleMessages,
@@ -130,7 +130,7 @@ readGames().forEach((game: string) => {
             let numberOfSpins = 0;
             startEventListener(page, consoleMessages);
 
-            await launchGame(page, game, consoleMessages);
+            await launchGame(page, game.name, consoleMessages);
 
             const startBalanceConsole = await getValueFromConsoleMessages(
                 consoleMessages,

@@ -34,8 +34,11 @@ export class Config {
     }
 
     private createProvidersList(): string[] {
-        const providerList = String(process.env.PROVIDERS);
-        return providerList.split(',');
+        const providerList = process.env.PROVIDERS;
+        if (!providerList) {
+            return [];
+        }
+        return String(providerList).split(',');
     }
 
     public getProviders(): string[] {

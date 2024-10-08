@@ -7,13 +7,13 @@ import {
     makeDeposit,
     readGames,
 } from './helpers';
-import { ExpectedMessage, Account } from '../types';
+import { ExpectedMessage, Account, Game } from '../types';
 import { config } from '../config/config';
 
 let page: Page;
 const accounts: Account[] = config.getAccounts();
-readGames().forEach((game: string) => {
-    test.describe(`Testing with game: ${game}`, () => {
+readGames().forEach((game: Game) => {
+    test.describe(`Testing with ${game.provider} game: ${game.name}`, () => {
         test.beforeEach(async ({ browser }) => {
             page = await browser.newPage();
         });
@@ -32,7 +32,7 @@ readGames().forEach((game: string) => {
 
             startEventListener(page, consoleMessages);
 
-            await launchGame(page, game, consoleMessages);
+            await launchGame(page, game.name, consoleMessages);
             await page
                 .frameLocator('#root iframe')
                 .getByRole('button', { name: 'Deposit' })

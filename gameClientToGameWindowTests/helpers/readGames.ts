@@ -1,14 +1,20 @@
 import * as fs from 'fs';
 import { config } from '../../config/config';
+import { Game } from '../../types';
 
 export const readGames = () => {
     const providers = config.getProviders();
     const games = JSON.parse(fs.readFileSync('games.json', 'utf-8'));
-    let gamesList: string[] = [];
+    const gamesList: Game[] = [];
 
-    for (const provider of providers) {
-        gamesList = gamesList.concat(games[provider]);
+    if (!providers || !providers.length) {
+        for (const provider in games) {
+            for (const game of games[provider]) {
+                gamesList.push({ name: game, provider });
+            }
+        }
+        return gamesList;
     }
 
-    return gamesList;
+    return [];
 };
