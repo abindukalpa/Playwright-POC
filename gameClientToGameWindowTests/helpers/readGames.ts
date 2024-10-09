@@ -7,15 +7,6 @@ export const readGames = () => {
     const games = JSON.parse(fs.readFileSync('games.json', 'utf-8'));
     const gamesList: Game[] = [];
 
-    if (!providers || !providers.length) {
-        for (const provider in games) {
-            for (const game of games[provider]) {
-                gamesList.push({ name: game, provider });
-            }
-        }
-        return gamesList;
-    }
-
     for (const provider of providers) {
         for (const game of games[provider]) {
             gamesList.push({ name: game, provider });

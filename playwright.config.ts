@@ -1,5 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import { config } from './config/config';
 import * as path from 'path';
 import dotenv from 'dotenv';
 /**
@@ -7,7 +6,10 @@ import dotenv from 'dotenv';
  * https://github.com/motdotla/dotenv
  */
 dotenv.config({
-    path: path.resolve(process.cwd(), `.env.${config.getNodeEnv()}`),
+    path: path.resolve(
+        process.cwd(),
+        `.env.${process.env.NODE_ENV ? String(process.env.NODE_ENV) : 'nxt'}`
+    ),
 });
 
 /**
