@@ -23,6 +23,7 @@ install: $(INSTALL_STAMP)
 
 $(INSTALL_STAMP): package.json package-lock.json
 	npm install
+	npx playwright install
 	touch $(INSTALL_STAMP)
 
 lint:

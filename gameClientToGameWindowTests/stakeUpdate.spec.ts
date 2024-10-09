@@ -7,13 +7,13 @@ import {
     getValueFromConsoleMessages,
     getStakeAmountGameWindow,
 } from './helpers';
-import { Account, ExpectedMessage } from '../types';
+import { Account, ExpectedMessage, Game } from '../types';
 import { config } from '../config/config';
 
 let page: Page;
 const accounts: Account[] = config.getAccounts();
-readGames().forEach((game: string) => {
-    test.describe(`Testing with game: ${game}`, async () => {
+readGames().forEach((game: Game) => {
+    test.describe(`Testing with ${game.provider} game: ${game.name}`, async () => {
         test.beforeEach(async ({ browser }) => {
             const workerNumber = test.info().parallelIndex;
             const account: Account = accounts[workerNumber];
@@ -29,7 +29,7 @@ readGames().forEach((game: string) => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
 
-            await launchGame(page, game, consoleMessages);
+            await launchGame(page, game.name, consoleMessages);
 
             const stakeAmountGameWindowStart =
                 await getStakeAmountGameWindow(page);
@@ -76,7 +76,7 @@ readGames().forEach((game: string) => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
 
-            await launchGame(page, game, consoleMessages);
+            await launchGame(page, game.name, consoleMessages);
 
             const stakeAmountGameWindowStart =
                 await getStakeAmountGameWindow(page);
@@ -126,7 +126,7 @@ readGames().forEach((game: string) => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
 
-            await launchGame(page, game, consoleMessages);
+            await launchGame(page, game.name, consoleMessages);
 
             await page.mouse.click(300, 300, { delay: 1000 });
 

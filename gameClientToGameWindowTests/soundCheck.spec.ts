@@ -7,15 +7,15 @@ import {
     readGames,
     deletePreviousConsoleMessages,
 } from './helpers';
-import { Account, ExpectedMessage } from '../types';
+import { Account, ExpectedMessage, Game } from '../types';
 import { config } from '../config/config';
 
 let page: Page;
 const accounts: Account[] = config.getAccounts();
-readGames().forEach((game: string) => {
+readGames().forEach((game: Game) => {
     const ICON_MUTED_CLASS = 'muted';
 
-    test.describe(`Testing with game: ${game}`, () => {
+    test.describe(`Testing with ${game.provider} game: ${game.name}`, () => {
         test.beforeEach(async ({ browser }) => {
             const workerNumber = test.info().parallelIndex;
             const account: Account = accounts[workerNumber];
@@ -30,7 +30,7 @@ readGames().forEach((game: string) => {
         test('sound toggle', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
-            await launchGame(page, game, consoleMessages);
+            await launchGame(page, game.name, consoleMessages);
             const soundToggleIcon = page
                 .frameLocator('#root iframe')
                 .locator('i.icon-volume');

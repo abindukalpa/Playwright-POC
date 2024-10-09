@@ -7,12 +7,12 @@ import {
     readGames,
 } from './helpers';
 import { config } from '../config/config';
-import { Account, ExpectedMessage } from '../types';
+import { Account, ExpectedMessage, Game } from '../types';
 
 let page: Page;
 const accounts: Account[] = config.getAccounts();
-readGames().forEach((game: string) => {
-    test.describe(`Testing with game: ${game}`, () => {
+readGames().forEach((game: Game) => {
+    test.describe(`Testing with ${game.provider} game: ${game.name}`, () => {
         test.beforeEach(async ({ browser }) => {
             const workerNumber = test.info().parallelIndex;
             const account: Account = accounts[workerNumber];
@@ -27,7 +27,7 @@ readGames().forEach((game: string) => {
         test('game help', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
-            await launchGame(page, game, consoleMessages);
+            await launchGame(page, game.name, consoleMessages);
 
             await expect(
                 page
@@ -68,7 +68,7 @@ readGames().forEach((game: string) => {
         test('toggle paytable', async () => {
             const consoleMessages: string[] = [];
             startEventListener(page, consoleMessages);
-            await launchGame(page, game, consoleMessages);
+            await launchGame(page, game.name, consoleMessages);
 
             await expect(
                 page
